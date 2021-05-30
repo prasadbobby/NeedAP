@@ -1,0 +1,463 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>{{siteName}} - Twitter Data</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+<meta name="author" content="Prasad Bobby">
+<meta name="keywords" content="prasadbobby, prasad bobby,  needap, need ap, andhra pradesh, ap, andhra, andhra covid cases, ap beds availability, hospital beds list, donors list ap, donate blood, donate plasma, plasma therapy, find donors, covid positive, covid negative, coronavirus therapy, plasma, delhi, mumbai, chandigarh, donors, register patient, register donor, help society, do good, blessings" />
+<meta name="description" content="This site connects current COVID patients with recovered COVID patients who wish to donate plasma/blood.For the last few weeks, we have witnessed a flood of heart-wrenching posts on social media platforms from people looking for life-saving blood/plasma for their loved ones. This site is developed by Prasadbobby, 6300807459" />
+<meta property="og:url" content="https://needap.in/" />
+<meta property="og:type" content="Website" />
+<meta property="og:site_name" content="needap.in" />
+<meta property="og:title" content="Need AP - To check availability of hospital beds and plasma in AP" />
+<meta property="og:description" content="This site connects current COVID patients with recovered COVID patients who wish to donate plasma/blood. For the last few weeks, we have witnessed a flood of heart-wrenching posts on social media platforms from people looking for life-saving blood/plasma for their loved ones. This site is developed by Prasadbobby, 6300807459" />
+<meta property="og:image" content="/images/logos/logo.png" />
+<meta property="og:image:url" content="/images/logos/logo.png" />
+<meta property="og:updated_time" content="{{siteDate}}" />
+<meta name="twitter:creator" content="@prasadbobby_">
+<meta name="twitter:title" content="Need AP - To check availability of hospital beds and plasma in AP" />
+<meta name="twitter:description" content="This site connects current COVID patients with recovered COVID patients who wish to donate plasma/blood. For the last few weeks, we have witnessed a flood of heart-wrenching posts on social media platforms from people looking for life-saving blood/plasma for their loved ones. This site is developed by Prasadbobby, 6300807459" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@need_ap">
+<meta name="twitter:url" content="https://needap.in/" />
+<meta name="twitter:image" content="images/logos/full-logo.png" />
+<link rel="shortcut icon" sizes="196x196" href="/images/logos/logo.png"/>
+<meta itemprop="name" content="{{siteName}}"/>
+<meta itemprop="description" content="This site connects current COVID patients with recovered COVID patients who wish to donate plasma/blood.For the last few weeks, we have witnessed a flood of heart-wrenching posts on social media platforms from people looking for life-saving blood/plasma for their loved ones. This site is developed by Prasadbobby, 6300807459"/>
+<meta itemprop="image" content="/images/logos/logo.png"/>
+<meta name="theme-color" content="#ffffff">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZ5WL8523Z"></script>
+<script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+   
+   gtag('config', 'G-TZ5WL8523Z');
+</script>
+<link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
+<script type="text/javascript" src="scripts/custom.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+{{!-- <script src="scripts/timeago.min.js"></script> --}}
+<link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css">
+<link rel="manifest" href="_manifest.json" data-pwa-version="1.0">
+<link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
+</head>
+<body class="theme-light">
+<div id="preloader"><div class="spinner-border color-highlight" role="status"></div></div>
+
+<div id="page">
+<div class="header header-auto-show header-fixed header-logo-center">
+<a href="/home" class="header-title">{{siteName}}</a>
+<a href="#" data-menu="menu-main" class="header-icon header-icon-1"><i class="fas fa-bars"></i></a>
+<a href="#" data-toggle-theme class="header-icon header-icon-4 show-on-theme-dark"><i class="fas fa-sun"></i></a>
+<a href="#" data-toggle-theme class="header-icon header-icon-4 show-on-theme-light"><i class="fas fa-moon"></i></a>
+<a href="#" data-menu="menu-share" class="header-icon header-icon-3"><i class="fas fa-share-alt"></i></a>
+</div>
+<div id="footer-bar" class="footer-bar-4 shadow-xl rounded-s">
+<a href="/home" ><i class="fa fa-home">
+    {{!-- <svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="20px"  viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg> --}}
+    </i><span>Home</span></a>
+
+<a href="/vaccine"><i class="fas fa-virus"></i><span>Vaccine</span></a>
+<a href="/donate"><i class="fa fa-heart"></i><span>Donate</span></a>
+{{!-- <a href="/features"><i class="fa fa-star"></i><span>Features</span></a> --}}
+<a href="/donorslist"><i class="fas fa-chart-line"></i><span>Donors list</span></a>
+
+<a href="/feed"><i class="fas fa-rss"></i><span>Feed</span></a>
+</div>
+<div class="page-title page-title-fixed">
+<h1>{{siteName}}</h1>
+<a href="#" class="page-title-icon shadow-xl bg-theme color-theme" data-menu="menu-share"><i class="fa fa-share-alt"></i></a>
+<a href="#" class="page-title-icon shadow-xl bg-theme color-theme show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="page-title-icon shadow-xl bg-theme color-theme show-on-theme-dark" data-toggle-theme><i class="fa fa-lightbulb color-yellow-dark"></i></a>
+<a href="#" class="page-title-icon shadow-xl bg-theme color-theme" data-menu="menu-main"><i class="fa fa-bars"></i></a>
+</div>
+
+<div class="page-title-clear"></div>
+
+<div class="page-content">
+
+
+
+    
+<div class="content mt-n3 mb-4">
+<div class="search-box search-dark shadow-sm border-0 mt-4 bg-theme rounded-sm bottom-0">
+<i class="fa fa-search ms-1"></i>
+<input type="text" class="border-0" placeholder="Searching for Twitter Data? " data-search>
+</div>
+<div class="search-results disabled-search-list">
+<div>
+
+
+ 
+
+
+{{#each tweetData}}
+
+<div class="card card-style mt-4 m-0"  data-filter-item data-filter-name="{{this.resourceInfo}}">
+<div class="content">
+{{!-- <h1 class="font-18 font-800 mb-0">{{this.name}}</h1> --}}
+<p class=" font-15 mb-0">
+{{this.resourceInfo}}
+</p>
+
+
+</div>
+</div>
+
+
+
+{{/each }}
+
+
+
+
+ 
+
+</div>
+</div>
+</div>
+<div class="search-no-results disabled mt-4">
+<div class="card card-style">
+<div class="content">
+<h1>No Results</h1>
+<p>
+Your search brought up no results. Try using a different keyword. Or try typing all
+to see all items.
+</p>
+</div>
+</div>
+</div>
+
+<div class="card card-style covidBg-3" data-card-height="300">
+<div class="card-top px-3 py-3">
+<a href="#" data-menu="menu-heart" class="bg-white rounded-sm icon icon-xs float-end"><i class="fa fa-heart color-red-dark"></i></a>
+</div>
+<div class="card-bottom px-3 py-3">
+<h1 class="color-white">Twitter Data</h1>
+</div>
+<div class="card-overlay bg-gradient opacity-30"></div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+<div class="content my-0">
+<h6 class="font-15 font-600 mb-n1">
+{{!-- <i class="fa fa-check-circle color-red-dark icon-30"></i> --}}
+<strong class="color-highlight">Note</strong>. We are extracting these data from Twitter. Please verify with the hospital.
+</h6>
+ <div class="divider mt-4"></div>
+</div>
+
+<div class="content">
+
+{{#each tweetData}}
+
+<div class="card card-style mt-4 m-0"  data-filter-item data-filter-name="{{this.resourceInfo}}">
+<div class="content">
+{{!-- <h1 class="font-18 font-800 mb-0">{{this.name}}</h1> --}}
+<p class=" font-15 mb-0">
+{{this.resourceInfo}}
+</p>
+
+
+</div>
+</div>
+
+
+
+{{/each }}
+
+</div>
+
+
+
+<div class="content mb-0">
+<div class="d-flex">
+<div class="align-self-center">
+<h1 class="mb-0 font-18">Other Plasma Resources</h1>
+</div>
+<div class="ms-auto align-self-center">
+{{!-- <a href="#" class="float-end font-12 font-400">See All</a> --}}
+</div>
+</div>
+</div>
+
+<div class="splide double-slider visible-slider slider-no-arrows slider-no-dots" id="double-slider-3">
+<div class="splide__track">
+<div class="splide__list">
+<div class="splide__slide">
+<a href="https://www.dhoondh.com/" target="_blank" class="external-link">
+<div data-card-height="185" class="card rounded-m ms-3 shadow-l" style="background-image:url(https://res.cloudinary.com/need-ap/image/upload/v1621931924/blood-4_jn9upj.jpg)">
+<div class="card-top mt-2">
+<p class="color-white"><i class="fa fa-heart color-red-dark px-2"></i></p>
+</div>
+<div class="card-bottom mb-2">
+<h5 class="color-white font-15 px-2">Dhoondh</h5>
+{{!-- <p class="color-white mb-0 mt-n2 font-11 opacity-30 px-2">Loved by A-TEAM!</p> --}}
+</div>
+<div class="card-overlay bg-gradient opacity-30"></div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+</a>
+</div>
+<div class="splide__slide">
+<a href="https://needplasma.in/" target="_blank" class="external-link">
+<div data-card-height="185" class="card rounded-m ms-3 shadow-l" style="background-image:url(https://res.cloudinary.com/need-ap/image/upload/v1621887629/blood-1_drqwrk.jpg)">
+<div class="card-top mt-2">
+<p class="color-white"><i class="fa fa-heart color-red-dark px-2"></i></p>
+</div>
+<div class="card-bottom mb-2">
+<h5 class="color-white font-15 px-2">Need Plasma</h5>
+{{!-- <p class="color-white mb-0 mt-n2 font-11 opacity-30 px-2">Loved by John Doe</p> --}}
+</div>
+<div class="card-overlay bg-gradien opacity-30t"></div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+</a>
+</div>
+<div class="splide__slide">
+<a href="https://plasmadonor.in/" target="_blank"  class="external-link">
+<div data-card-height="185" class="card rounded-m ms-2 shadow-l" style="background-image:url(https://res.cloudinary.com/need-ap/image/upload/v1621887614/blood-22_nzggq8.jpg)">
+<div class="card-top mt-2">
+<p class="color-white"><i class="fa fa-heart color-red-dark px-2"></i></p>
+</div>
+<div class="card-bottom mb-2">
+<h5 class="color-white font-15 px-2">Plasma Donor</h5>
+{{!-- <p class="color-white mb-0 mt-n2 font-11 opacity-30 px-2">Loved by John Doe</p> --}}
+</div>
+<div class="card-overlay bg-gradient opacity-30"></div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+</a>
+</div>
+<div class="splide__slide">
+<a href="https://plasmaline.in/" target="_blank"  class="external-link">
+<div data-card-height="185" class="card rounded-m ms-3 shadow-l" style="background-image:url(https://res.cloudinary.com/need-ap/image/upload/v1621939326/blood-5_d5e1g7.jpg)">
+<div class="card-top mt-2">
+<p class="color-white"><i class="fa fa-heart color-red-dark px-2"></i></p>
+</div>
+<div class="card-bottom mb-2">
+<h5 class="color-white font-15 px-2">Plasma Line</h5>
+{{!-- <p class="color-white mb-0 mt-n2 font-11 opacity-30 px-2">Loved by John Doe</p> --}}
+</div>
+<div class="card-overlay bg-gradient opacity-30"></div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div data-menu-load="/menu-footer"></div>
+</div>
+
+
+
+
+<div id="menu-heart" class="menu menu-box-modal rounded-m" data-menu-hide="1000" data-menu-width="250" data-menu-height="170">
+<h1 class="text-center mt-3 pt-2">
+<i class="fa fa-heart color-red-dark fa-3x scale-icon"></i>
+</h1>
+<h3 class="text-center pt-2">Saved to Favorites</h3>
+</div>
+
+<div id="menu-main" class="menu menu-box-left rounded-0" data-menu-load="/menu-main" data-menu-width="280" data-menu-active="nav-hospitals"></div>
+
+<div id="menu-share" class="menu menu-box-bottom rounded-m" data-menu-load="/menu-share" data-menu-height="370"></div>
+<div id="menu-feedback" class="menu menu-box-bottom rounded-m" data-menu-load="/menu-feedback" data-menu-height="452" data-menu-effect="menu-over"></div>
+<div id="menu-qr" class="menu menu-box-bottom rounded-m bg-theme" data-menu-height="400" data-menu-load="/menu-qr" ></div>
+
+</div>
+
+{{!-- popup-1 --}}
+<div id="article-1" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
+<div class="card rounded-0 covidBg-1" data-card-height="500">
+<div class="card-top pt-4 ps-3 pe-3">
+<a href="#" class="close-menu icon icon-s rounded-l bg-theme color-theme "><i class="fa fa-arrow-up"></i></a>
+<a href="/home" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3"><i class="fa fa-home"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-dark" data-toggle-theme><i class="fa fa-sun"></i></a>
+</div>
+<div class="card-bottom ps-3 pe-3 mb-5 pb-4">
+<h1 class="color-white font-36">Confirmed Cases</h1>
+<p class="color-white opacity-50">
+{{!-- This article will deploy from the top of the page. You can deploy articles from any part of the page you want. --}}
+</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+ 
+<div class="card card-style" style="margin: 0 5px 20px; margin-top:-100px;margin-bottom: -80px;z-index: 1;">
+<div class="content mb-0">
+<p class="text-center mb-n1 font-12 font-600 color-highlight">Andhra Pradesh Confirmed Cases</p>
+<h1 class="text-center font-28 mb-4">Statistics</h1>
+<div class="chart-container mb-4" style="width:100%; height:350px;">
+<canvas class="graph" id="vertical-chart-1" /></canvas>
+</div>
+</div>
+</div>
+
+<div class="card rounded-0 bg-1" data-card-height="400">
+<div class="card-center">
+<h1 class="color-white font-italic text-center font-40">#STAY H<i class="fa fa-heart" style="color: crimson;"></i>ME</h1>
+<h1 class="font-italic text-center font-40" style="color: crimson;">#STAY S<svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="30px" fill="#fff" viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg>FE</h1>
+<p class="color-white text-center mb-0 mt-n2">With lots of Care and Love by {{siteName}}</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+{{!-- <div class="card card-style">
+
+<a href="#" class="close-menu btn btn-l rounded-sm font-600 btn-full btn-margins gradient-red">Close Article</a>
+
+</div> --}}
+</div>
+
+{{!-- popup-1 ending --}}
+
+
+{{!-- popup-2 --}}
+<div id="article-2" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
+<div class="card rounded-0 covidBg-2" data-card-height="500">
+<div class="card-top pt-4 ps-3 pe-3">
+<a href="#" class="close-menu icon icon-s rounded-l bg-theme color-theme "><i class="fa fa-arrow-up"></i></a>
+<a href="/home" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3"><i class="fa fa-home"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-dark" data-toggle-theme><i class="fa fa-sun"></i></a>
+</div>
+<div class="card-bottom ps-3 pe-3 mb-5 pb-4">
+<h1 class="color-white font-36">Recovered Cases</h1>
+<p class="color-white opacity-50">
+{{!-- This article will deploy from the top of the page. You can deploy articles from any part of the page you want. --}}
+</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+
+<div class="card card-style" style="margin: 0 5px 20px; margin-top:-100px;margin-bottom: -80px;z-index: 1;">
+<div class="content mb-0">
+<p class="text-center mb-n1 font-12 font-600 color-highlight">Andhra Pradesh Recovered Cases</p>
+<h1 class="text-center font-28 mb-4">Statistics</h1>
+<div class="chart-container mb-4" style="width:100%; height:350px;">
+<canvas class="graph" id="vertical-chart-2" /></canvas>
+</div>
+</div>
+</div>
+
+<div class="card rounded-0 bg-1" data-card-height="400">
+<div class="card-center">
+<h1 class="color-white font-italic text-center font-40">#STAY H<i class="fa fa-heart" style="color: crimson;"></i>ME</h1>
+<h1 class="font-italic text-center font-40" style="color: crimson;">#STAY S<svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="30px" fill="#fff" viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg>FE</h1>
+<p class="color-white text-center mb-0 mt-n2">With lots of Care and Love by {{siteName}}</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+</div>
+
+{{!-- popup-2 ending --}}
+
+
+
+{{!-- popup-3 --}}
+<div id="article-3" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
+<div class="card rounded-0 covidBg-1" data-card-height="500">
+<div class="card-top pt-4 ps-3 pe-3">
+<a href="#" class="close-menu icon icon-s rounded-l bg-theme color-theme "><i class="fa fa-arrow-up"></i></a>
+<a href="/home" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3"><i class="fa fa-home"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-dark" data-toggle-theme><i class="fa fa-sun"></i></a>
+</div>
+<div class="card-bottom ps-3 pe-3 mb-5 pb-4">
+<h1 class="color-white font-36">Active Cases</h1>
+<p class="color-white opacity-50">
+{{!-- This article will deploy from the top of the page. You can deploy articles from any part of the page you want. --}}
+</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+
+<div class="card card-style" style="margin: 0 5px 20px; margin-top:-100px;margin-bottom: -80px;z-index: 1;">
+<div class="content mb-0">
+<p class="text-center mb-n1 font-12 font-600 color-highlight">Andhra Pradesh Active Cases</p>
+<h1 class="text-center font-28 mb-4">Statistics</h1>
+<div class="chart-container mb-4" style="width:100%; height:350px;">
+<canvas class="graph" id="vertical-chart-3" /></canvas>
+</div>
+</div>
+</div>
+
+<div class="card rounded-0 bg-1" data-card-height="400">
+<div class="card-center">
+<h1 class="color-white font-italic text-center font-40">#STAY H<i class="fa fa-heart" style="color: crimson;"></i>ME</h1>
+<h1 class="font-italic text-center font-40" style="color: crimson;">#STAY S<svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="30px" fill="#fff" viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg>FE</h1>
+<p class="color-white text-center mb-0 mt-n2">With lots of Care and Love by {{siteName}}</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+</div>
+
+{{!-- popup-3 ending --}}
+
+
+
+
+{{!-- popup-4 --}}
+<div id="article-4" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
+<div class="card rounded-0 covidBg-2" data-card-height="500">
+<div class="card-top pt-4 ps-3 pe-3">
+<a href="#" class="close-menu icon icon-s rounded-l bg-theme color-theme "><i class="fa fa-arrow-up"></i></a>
+<a href="/home" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3"><i class="fa fa-home"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-dark" data-toggle-theme><i class="fa fa-sun"></i></a>
+</div>
+<div class="card-bottom ps-3 pe-3 mb-5 pb-4">
+<h1 class="color-white font-36">Death Cases</h1>
+<p class="color-white opacity-50">
+{{!-- This article will deploy from the top of the page. You can deploy articles from any part of the page you want. --}}
+</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+
+<div class="card card-style" style="margin: 0 5px 20px; margin-top:-100px;margin-bottom: -80px;z-index: 1;">
+<div class="content mb-0">
+<p class="text-center mb-n1 font-12 font-600 color-highlight">Andhra Pradesh Death Cases</p>
+<h1 class="text-center font-28 mb-4">Statistics</h1>
+<div class="chart-container mb-4" style="width:100%; height:350px;">
+<canvas class="graph" id="vertical-chart-4" /></canvas>
+</div>
+</div>
+</div>
+
+<div class="card rounded-0 bg-1" data-card-height="400">
+<div class="card-center">
+<h1 class="color-white font-italic text-center font-40">#STAY H<i class="fa fa-heart" style="color: crimson;"></i>ME</h1>
+<h1 class="font-italic text-center font-40" style="color: crimson;">#STAY S<svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="30px" fill="#fff" viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg>FE</h1>
+<p class="color-white text-center mb-0 mt-n2">With lots of Care and Love by {{siteName}}</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+</div>
+
+{{!-- popup-4 ending --}}
+<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+<script>
+
+
+</script>
+</body>

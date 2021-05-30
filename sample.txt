@@ -1,0 +1,8 @@
+SITE_TITLE= Need
+GOOGLE_CLIENT_ID = 478138733320-3bbsdu5j3p4k37vcqjd72dsckhjh0uvo.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET = EcrWtLIGLABm-g97ySnrESpw
+CALLBACK_URL = https://www.needap.in/google/callback
+MAIL_USERNAME = need.andhrapradesh@gmail.com
+MAIL_PASSWORD = Needap@6100 
+MAIL_HOST = gmail
+MAIL_PORT = 2525 

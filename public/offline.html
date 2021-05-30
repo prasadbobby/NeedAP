@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Need AP - you are offline now😴</title>
+        <style type="text/css">
+            html {
+                height: 100%;
+            }
+            body {
+                height: 100%;
+                margin: 0;
+                background: #ffffff;
+                font-family: consolas;;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+            }
+        
+            .city {
+                align-items: center;
+                width: 80%;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                padding: 40px 8%;
+                border-radius: 22px;
+                background: #ffffff;
+                box-shadow:  20px 20px 60px #d9d9d9, 
+                            -20px -20px 60px #ffffff;
+            
+            }
+
+            .city-name {
+                font-size: 2em;
+            }
+            a{
+                margin: 10px 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="city">
+            <h2 class="city-name">
+                <span>Please go online and Check the availability of donors.</span>
+                <!-- <a href="#" onclick="load()">Reload</a> -->
+            </h2>
+        </div>
+        <script>
+            function load(){
+                window.location.reload();
+            }
+        </script>
+    </body>
+</html>

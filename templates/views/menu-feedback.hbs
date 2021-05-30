@@ -1,0 +1,86 @@
+<div class="menu-title">
+<p class="color-highlight">Show your love with</p>
+<h1 class="font-24">Feedback</h1>
+<a href="#" class="close-menu"><i class="fa fa-times-circle"></i></a>
+</div>
+<div class="content mb-0 mt-0">
+<form action="/feedback" method="post">
+<div class="input-style no-borders has-icon validate-field mb-4">
+<i class="fa fa-user"></i>
+<input type="name" class="form-control validate-name" id="feedbackname" placeholder="Name" autocomplete="name" required name="feedbackname">
+<label for="feedbackname" class="color-highlight font-11 font-500">Name</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="input-style no-borders has-icon validate-field mb-4">
+<i class="fas fa-phone-alt"></i>
+<input type="number" class="form-control validate-number" id="feedbacknumber" placeholder="Phone" autocomplete="phone" required name="feedbacknumber">
+<label for="feedbacknumber" class="color-highlight font-11 font-500">Phone</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="input-style no-borders has-icon validate-field mb-4">
+<i class="fa fa-at"></i>
+<input type="email" class="form-control validate-email" id="feedbackemail" placeholder="Email" required name="feedbackemail">
+<label for="feedbackemail" class="color-highlight font-11 font-500">Email</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="rate" style="display: flex;">
+<div class="font-15" style="margin-top: 14px; margin-left:5px">Rating</div>
+<div class="rating">
+  <label>
+    <input type="radio" value="1"  required name="feedbackrating"/>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+  </label>
+  <label>
+    <input type="radio" value="2" name="feedbackrating" />
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+  </label>
+  <label>
+    <input type="radio" value="3" name="feedbackrating" />
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>   
+  </label>
+  <label>
+    <input type="radio" value="4" name="feedbackrating" />
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+  </label>
+  <label>
+    <input type="radio" value="5" name="feedbackrating" />
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+    <span class="icon"><i class="fa fa-star font-28"></i></span>
+  </label>
+</div>
+</div>
+<div class="input-style no-borders has-icon validate-field mb-4">
+<i class="fa fa-envelope"></i>
+<input type="text" class="form-control validate-email" id="feedbackdata" placeholder="What you have to say about us?" required name="feedback"/>
+<label for="feedbackdata" class="color-highlight font-11 font-500">Feedback</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+{{!-- <div class="input-style no-borders has-icon mb-4">
+<i class="fa fa-at"></i>
+<textarea id="address" class="form-control validate-email" placeholder="What you have to say about us?" name="feedbackdata" required></textarea>
+<label for="feedbackdata" class="color-highlight">Feedback</label>
+<em class="mt-n3">(required)</em>
+</div> --}}
+{{!-- <p class="text-center pb-0 mb-n1 pt-1">
+<a href="#" data-menu="menu-signin" class="text-center font-11 color-gray2-dark">Already Registered? Sign In Here.</a>
+</p> --}}
+<input type="submit" class="btn btn-full btn-m shadow-l rounded-s font-600 bg-blue-dark mt-4" style="width: 100%;">
+</form>
+</div>

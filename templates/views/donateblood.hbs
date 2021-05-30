@@ -1,0 +1,580 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>{{siteName}} - DOnate Blood</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+<meta name="author" content="Prasad Bobby">
+<meta name="keywords" content="prasadbobby, prasad bobby,  needap, need ap, andhra pradesh, ap, andhra, andhra covid cases, ap beds availability, hospital beds list, donors list ap, donate blood, donate plasma, plasma therapy, find donors, covid positive, covid negative, coronavirus therapy, plasma, delhi, mumbai, chandigarh, donors, register patient, register donor, help society, do good, blessings" />
+<meta name="description" content="This site connects current COVID patients with recovered COVID patients who wish to donate plasma/blood.For the last few weeks, we have witnessed a flood of heart-wrenching posts on social media platforms from people looking for life-saving blood/plasma for their loved ones. This site is developed by Prasadbobby, 6300807459" />
+<meta property="og:url" content="https://needap.in/" />
+<meta property="og:type" content="Website" />
+<meta property="og:site_name" content="needap.in" />
+<meta property="og:title" content="Need AP - To check availability of hospital beds and plasma in AP" />
+<meta property="og:description" content="This site connects current COVID patients with recovered COVID patients who wish to donate plasma/blood. For the last few weeks, we have witnessed a flood of heart-wrenching posts on social media platforms from people looking for life-saving blood/plasma for their loved ones. This site is developed by Prasadbobby, 6300807459" />
+<meta property="og:image" content="/images/logos/logo.png" />
+<meta property="og:image:url" content="/images/logos/logo.png" />
+<meta property="og:updated_time" content="{{siteDate}}" />
+<meta name="twitter:creator" content="@prasadbobby_">
+<meta name="twitter:title" content="Need AP - To check availability of hospital beds and plasma in AP" />
+<meta name="twitter:description" content="This site connects current COVID patients with recovered COVID patients who wish to donate plasma/blood. For the last few weeks, we have witnessed a flood of heart-wrenching posts on social media platforms from people looking for life-saving blood/plasma for their loved ones. This site is developed by Prasadbobby, 6300807459" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@need_ap">
+<meta name="twitter:url" content="https://needap.in/" />
+<meta name="twitter:image" content="images/logos/full-logo.png" />
+<link rel="shortcut icon" sizes="196x196" href="/images/logos/logo.png"/>
+<meta itemprop="name" content="{{siteName}}"/>
+<meta itemprop="description" content="This site connects current COVID patients with recovered COVID patients who wish to donate plasma/blood.For the last few weeks, we have witnessed a flood of heart-wrenching posts on social media platforms from people looking for life-saving blood/plasma for their loved ones. This site is developed by Prasadbobby, 6300807459"/>
+<meta itemprop="image" content="/images/logos/logo.png"/>
+<meta name="theme-color" content="#ffffff">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TZ5WL8523Z"></script>
+<script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+   
+   gtag('config', 'G-TZ5WL8523Z');
+</script>
+<link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script type="text/javascript" src="scripts/custom.js"></script>
+<link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css">
+<link rel="manifest" href="_manifest.json" data-pwa-version="1.0">
+<link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
+</head>
+<body class="theme-light">
+<div id="preloader"><div class="spinner-border color-highlight" role="status"></div></div>
+<div id="page">
+<div class="header header-auto-show header-fixed header-logo-center">
+<a href="/home" class="header-title">{{siteName}}</a>
+<a href="#" data-menu="menu-main" class="header-icon header-icon-1"><i class="fas fa-bars"></i></a>
+<a href="#" data-toggle-theme class="header-icon header-icon-4 show-on-theme-dark"><i class="fas fa-sun"></i></a>
+<a href="#" data-toggle-theme class="header-icon header-icon-4 show-on-theme-light"><i class="fas fa-moon"></i></a>
+<a href="#" data-menu="menu-share" class="header-icon header-icon-3"><i class="fas fa-share-alt"></i></a>
+</div>
+<div id="footer-bar" class="footer-bar-4 shadow-xl rounded-s">
+<a href="/home" ><i class="fa fa-home">
+    {{!-- <svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="20px"  viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg> --}}
+    </i><span>Home</span></a>
+
+<a href="/search" ><i class="fa fa-search"></i><span>Search</span></a>
+<a href="/donate" class="active-nav"><i class="fa fa-heart"></i><span>Donate</span><strong></strong></a>
+{{!-- <a href="/features"><i class="fa fa-star"></i><span>Features</span></a> --}}
+<a href="/donorslist"><i class="fas fa-chart-line"></i><span>Donors list</span></a>
+<a href="/feed"><i class="fas fa-rss"></i><span>Feed</span></a>
+</div>
+
+<div class="page-title page-title-fixed">
+<h1>{{siteName}}</h1>
+<a href="#" class="page-title-icon shadow-xl bg-theme color-theme" data-menu="menu-share"><i class="fa fa-share-alt"></i></a>
+<a href="#" class="page-title-icon shadow-xl bg-theme color-theme show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="page-title-icon shadow-xl bg-theme color-theme show-on-theme-dark" data-toggle-theme><i class="fa fa-lightbulb color-yellow-dark"></i></a>
+<a href="#" class="page-title-icon shadow-xl bg-theme color-theme" data-menu="menu-main"><i class="fa fa-bars"></i></a>
+</div>
+<div class="page-title-clear"></div>
+<div class="page-content">
+{{!-- <div class="card card-style">
+<div class="content">
+<h4>Checkboxes & Radios</h4>
+<p>
+Default Checkboxes, styled with FontAwesome. You can use absolutely <strong class="color-theme">any icon</strong> and <strong class="color-theme">any color</strong> for checked option.
+</p>
+<div class="row mb-0">
+<div class="col-6">
+<div class="form-check icon-check">
+<input class="form-check-input" type="checkbox" value="" id="check1" checked>
+<label class="form-check-label" for="check1">Checkbox 1</label>
+<i class="icon-check-1 fa fa-square color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-square font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="checkbox" value="" id="check2">
+<label class="form-check-label" for="check2">Checkbox 2</label>
+<i class="icon-check-1 fa fa-circle color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-circle font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="checkbox" value="" id="check3" checked>
+<label class="form-check-label" for="check3">Checkbox 3</label>
+<i class="icon-check-1 far fa-square color-gray-dark font-16"></i>
+<i class="icon-check-2 far fa-check-square font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="checkbox" value="" id="check4">
+<label class="form-check-label" for="check4">Checkbox 4</label>
+<i class="icon-check-1 far fa-circle color-gray-dark font-16"></i>
+<i class="icon-check-2 far fa-check-circle font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="checkbox" value="" id="check5" checked>
+<label class="form-check-label" for="check5">Checkbox 5</label>
+<i class="icon-check-1 fa fa-thumbs-down color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-thumbs-up font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="checkbox" value="" id="check6">
+<label class="form-check-label" for="check6">Checkbox 6</label>
+<i class="icon-check-1 far fa-frown color-gray-dark font-16"></i>
+<i class="icon-check-2 far fa-smile font-16 color-highlight"></i>
+</div>
+</div>
+<div class="col-6">
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="inlineRadioOptions" value="" id="radio1">
+<label class="form-check-label" for="radio1">Radio 1</label>
+<i class="icon-check-1 fa fa-square color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-square font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="inlineRadioOptions" value="" id="radio2">
+<label class="form-check-label" for="radio2">Radio 2</label>
+<i class="icon-check-1 fa fa-circle color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-circle font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="inlineRadioOptions" value="" id="radio3">
+<label class="form-check-label" for="radio3">Radio 3</label>
+<i class="icon-check-1 far fa-square color-gray-dark font-16"></i>
+<i class="icon-check-2 far fa-check-square font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="inlineRadioOptions" value="" id="radio4">
+<label class="form-check-label" for="radio4">Radio 4</label>
+<i class="icon-check-1 far fa-circle color-gray-dark font-16"></i>
+ <i class="icon-check-2 far fa-check-circle font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="inlineRadioOptions" value="" id="radio5">
+<label class="form-check-label" for="radio5">Radio 5</label>
+<i class="icon-check-1 fa fa-thumbs-down color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-thumbs-up font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="inlineRadioOptions" value="" id="radio6">
+<label class="form-check-label" for="radio6">Radio 6</label>
+<i class="icon-check-1 far fa-frown color-gray-dark font-16"></i>
+<i class="icon-check-2 far fa-smile font-16 color-highlight"></i>
+</div> 
+</div>
+</div>
+</div>
+</div> --}}
+<div class="card card-style">
+<div class="content mb-0">
+<h3>Register as a Blood Donor</h3> 
+<h3 id="success"></h3>
+<p>
+Please fill the form if you want to donate your blood. Please make sure that the information is genuine, as we will be verifying the details submitted. 
+All information remains confidential.
+</p>
+<form action="/donateblood" method="POST" id="formid">
+<div class="input-style has-borders no-icon validate-field mb-4">
+<input type="name" class="form-control validate-name" name="donorname" id="name" autocomplete="new-name" required placeholder="Name">
+<label for="name" class="color-highlight">Name</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="input-style has-borders no-icon validate-field mb-4">
+<input type="email" class="form-control " id="email" value="{{email}}" name="donoremail" readonly placeholder="Email">
+<label for="email" class="color-highlight">Email</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="input-style has-borders no-icon validate-field mb-4">
+<input type="tel" class="form-control validate-text" id="phone" name="donorphone" required autocomplete="off" placeholder="Phone">
+<label for="phone" class="color-highlight">Phone</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="input-style has-borders no-icon validate-field mb-4">
+<input type="number" class="form-control validate-text" id="age" min="18" max="60" name="donorage" required autocomplete="off" placeholder="Age">
+<label for="age" class="color-highlight">Age</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="col-3 mb-3" style="padding-left: 9px!important;">
+<label for="gender" class="">Gender</label>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="donorgender" required value="Male" id="male">
+<label class="form-check-label" for="male">Male</label>
+<i class="icon-check-1 fa fa-circle color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-circle font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="donorgender" value="Female"  id="female">
+<label class="form-check-label" for="female">Female</label>
+<i class="icon-check-1 fa fa-circle color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-circle font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="donorgender" value="Others"  id="others">
+<label class="form-check-label" for="others">Others</label>
+<i class="icon-check-1 fa fa-circle color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-circle font-16 color-highlight"></i>
+</div>
+</div>
+<div class="col-3 mb-3" style="padding-left: 9px!important; width:80%;">
+<label for="areyou" class="">Are you ?</label>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="covidstatus" required value="Recovered COVID Patient"  id="recovered">
+<label class="form-check-label" for="recovered">Recovered COVID Patient</label>
+<i class="icon-check-1 fa fa-circle color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-circle font-16 color-highlight"></i>
+</div>
+<div class="form-check icon-check">
+<input class="form-check-input" type="radio" name="covidstatus" value="Never get COVID"  id="never">
+<label class="form-check-label" for="never">Never get COVID</label>
+<i class="icon-check-1 fa fa-circle color-gray-dark font-16"></i>
+<i class="icon-check-2 fa fa-check-circle font-16 color-highlight"></i>
+</div>
+</div>
+<div class="input-style has-borders no-icon mb-4 validate-field">
+ <label for="bloodgroup" class="color-highlight">Blood Group</label>
+<select id="bloodgroup" name="donorbloodgroup" required>
+<option value="" disabled selected>Choose Blood Group</option>
+<option value="A +ve" class="color-black">A +ve</option>
+<option value="A -ve" class="color-black">A -ve</option>
+<option value="B +ve" class="color-black">B +ve</option>
+<option value="B -ve" class="color-black">B -ve</option>
+<option value="AB +ve" class="color-black">AB +ve</option>
+<option value="AB -ve" class="color-black">AB -ve</option>
+<option value="O +ve" class="color-black">O +ve</option>
+<option value="O -ve" class="color-black">O -ve</option>
+<option value="I Don't Know" class="color-black">I Don't Know</option>
+</select>
+<span><i class="fa fa-chevron-down"></i></span>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<i class="fa fa-check disabled invalid color-red-dark"></i>
+<em></em>
+</div>
+<div class="input-style has-borders no-icon validate-field mb-4">
+<label for="state" class="color-highlight">State</label>
+<select id="state" name="donorstate" required>
+<option value="" disabled selected>Select State</option>
+<option value="Andhra Pradesh" class="color-black">Andhra Pradesh</option>
+<option value="Andaman and Nicobar Islands" class="color-black">Andaman and Nicobar Islands</option>
+<option value="Arunachal Pradesh" class="color-black">Arunachal Pradesh</option>
+<option value="Assam" class="color-black">Assam</option>
+<option value="Bihar" class="color-black">Bihar</option>
+<option value="Chandigarh" class="color-black">Chandigarh</option>
+<option value="Chhattisgarh" class="color-black">Chhattisgarh</option>
+<option value="Dadar and Nagar Haveli" class="color-black">Dadar and Nagar Haveli</option>
+<option value="Daman and Diu" class="color-black">Daman and Diu</option>
+<option value="Delhi" class="color-black">Delhi</option>
+<option value="Lakshadweep" class="color-black">Lakshadweep</option>
+<option value="Puducherry" class="color-black">Puducherry</option>
+<option value="Goa" class="color-black">Goa</option>
+<option value="Gujarat" class="color-black">Gujarat</option>
+<option value="Haryana" class="color-black">Haryana</option>
+<option value="Himachal Pradesh" class="color-black">Himachal Pradesh</option>
+<option value="Jammu and Kashmir" class="color-black">Jammu and Kashmir</option>
+<option value="Jharkhand" class="color-black">Jharkhand</option>
+<option value="Karnataka" class="color-black">Karnataka</option>
+<option value="Kerala" class="color-black">Kerala</option>
+<option value="Madhya Pradesh" class="color-black">Madhya Pradesh</option>
+<option value="Maharashtra" class="color-black">Maharashtra</option>
+<option value="Manipur" class="color-black">Manipur</option>
+<option value="Meghalaya" class="color-black">Meghalaya</option>
+<option value="Mizoram" class="color-black">Mizoram</option>
+<option value="Nagaland" class="color-black">Nagaland</option>
+<option value="Odisha" class="color-black">Odisha</option>
+<option value="Punjab" class="color-black">Punjab</option>
+<option value="Rajasthan" class="color-black">Rajasthan</option>
+<option value="Sikkim" class="color-black">Sikkim</option>
+<option value="Tamil Nadu" class="color-black">Tamil Nadu</option>
+<option value="Telangana" class="color-black">Telangana</option>
+<option value="Tripura" class="color-black">Tripura</option>
+<option value="Uttar Pradesh" class="color-black">Uttar Pradesh</option>
+<option value="Uttarakhand" class="color-black">Uttarakhand</option>
+<option value="West Bengal" class="color-black">West Bengal</option>
+</select>
+
+{{!-- <input type="text" class="form-control validate-text" required id="state" name="donorstate" autocomplete="off" placeholder="State"> --}}
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="input-style has-borders no-icon validate-field mb-4">
+<input type="text" class="form-control validate-text" required id="city" name="donordistrict" autocomplete="off" placeholder="District">
+<label for="district" class="color-highlight">District</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+{{!-- <div class="input-style has-borders no-icon mb-4">
+<input type="date" value="2030-12-31" value="2030-12-31" max="2030-01-01" min="2021-01-01" class="form-control validate-text" id="form6" placeholder="Phone">
+<label for="form6" class="color-highlight">Select Date</label>
+<i class="fa fa-check disabled valid me-4 pe-3 font-12 color-green-dark"></i>
+<i class="fa fa-check disabled invalid me-4 pe-3 font-12 color-red-dark"></i>
+</div> --}}
+<div class="input-style has-borders no-icon mb-4">
+<textarea id="address" placeholder="Address" name="donoraddress" required></textarea>
+<label for="address" class="color-highlight">Address</label>
+<em class="mt-n3">(required)</em>
+</div>
+<div class="mb-0">
+<h5>By submitting this form,</h5>
+<div class="content">
+<p>
+1.The information provided by me is complete and accurate to the best of my knowledge.<br>
+2.I agree to hold harmless {{siteName}} for its use of this information for the exclusive purpose(s) set out above. <br>
+3.{{siteName}} does not gaurantee to find a blood donor, but we shall do our level best to connect you with a qualified donor.</p>
+</div>
+
+<input type="submit" value="Submit" class="close-menu mt-3 mb-4 btn btn-m btn-center-l rounded-s shadow-xl text-uppercase font-900 bg-blue-dark submit-btn">
+<div class="content">
+{{!-- <a data-menu="menu-success-2" id="clicker">
+
+</a>
+
+<div id="suc" class="modal menu menu-box-bottom bg-green-dark rounded-m" data-menu-height="364" data-menu-effect="menu-over" style="margin-top: 530px; transition:all 2s ease">
+<h1 class="text-center mt-4">
+    <lottie-player src="scripts/lot.json"  background="transparent"  speed="1" style="width: 125px; height:125px; position:absolute;top:20%;left:50%;transform:translate(-50%,-50%)" class="shadow-xl rounded-circle" loop autoplay></lottie-player>
+    </h1>
+<h1 class="text-center font-700 color-white" style="margin-top: 120px;">All's Good</h1>
+<p class="boxed-text-l color-white opacity-70">
+You can continue with your previous actions.<br> Easy to attach these to success calls.
+</p>
+<a href="/home" class="close-menu btn btn-m btn-center-m button-s shadow-l rounded-s text-uppercase font-600 bg-white color-black">Great, Thanks!</a>
+</div> --}}
+<p class="hidden color-highlight font-13 opacity-80"></p>
+</div>
+</div>
+</form>
+</div>
+</div>
+
+      <div id="loader"></div>
+
+{{!-- <div data-menu-load="/menu-footer"></div>
+</div> --}}
+
+
+<div id="menu-main" class="menu menu-box-left rounded-0" data-menu-load="/menu-main" data-menu-width="280" data-menu-active="nav-welcome"></div>
+
+<div id="menu-share" class="menu menu-box-bottom rounded-m" data-menu-load="/menu-share" data-menu-height="370"></div>
+<div id="menu-feedback" class="menu menu-box-bottom rounded-m" data-menu-load="/menu-feedback" data-menu-height="452" data-menu-effect="menu-over"></div>
+<div id="menu-qr" class="menu menu-box-bottom rounded-m bg-theme" data-menu-height="400" data-menu-load="/menu-qr" ></div>
+
+{{!-- <div id="menu-colors" class="menu menu-box-bottom rounded-m" data-menu-load="menu-colors.html" data-menu-height="480"></div> --}}
+</div>
+
+{{!-- popup-1 --}}
+<div id="article-1" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
+<div class="card rounded-0 covidBg-1" data-card-height="500">
+<div class="card-top pt-4 ps-3 pe-3">
+<a href="#" class="close-menu icon icon-s rounded-l bg-theme color-theme "><i class="fa fa-arrow-up"></i></a>
+<a href="/home" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3"><i class="fa fa-home"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-dark" data-toggle-theme><i class="fa fa-sun"></i></a>
+</div>
+<div class="card-bottom ps-3 pe-3 mb-5 pb-4">
+<h1 class="color-white font-36">Confirmed Cases</h1>
+<p class="color-white opacity-50">
+{{!-- This article will deploy from the top of the page. You can deploy articles from any part of the page you want. --}}
+</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+ 
+<div class="card card-style" style="margin: 0 5px 20px; margin-top:-100px;margin-bottom: -80px;z-index: 1;">
+<div class="content mb-0">
+<p class="text-center mb-n1 font-12 font-600 color-highlight">Andhra Pradesh Confirmed Cases</p>
+<h1 class="text-center font-28 mb-4">Statistics</h1>
+<div class="chart-container mb-4" style="width:100%; height:350px;">
+<canvas class="graph" id="vertical-chart-1" /></canvas>
+</div>
+</div>
+</div>
+
+<div class="card rounded-0 bg-1" data-card-height="400">
+<div class="card-center">
+<h1 class="color-white font-italic text-center font-40">#STAY H<i class="fa fa-heart" style="color: crimson;"></i>ME</h1>
+<h1 class="font-italic text-center font-40" style="color: crimson;">#STAY S<svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="30px" fill="#fff" viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg>FE</h1>
+<p class="color-white text-center mb-0 mt-n2">With lots of Care and Love by {{siteName}}</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+{{!-- <div class="card card-style">
+
+<a href="#" class="close-menu btn btn-l rounded-sm font-600 btn-full btn-margins gradient-red">Close Article</a>
+
+</div> --}}
+</div>
+
+{{!-- popup-1 ending --}}
+
+
+{{!-- popup-2 --}}
+<div id="article-2" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
+<div class="card rounded-0 covidBg-2" data-card-height="500">
+<div class="card-top pt-4 ps-3 pe-3">
+<a href="#" class="close-menu icon icon-s rounded-l bg-theme color-theme "><i class="fa fa-arrow-up"></i></a>
+<a href="/home" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3"><i class="fa fa-home"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-dark" data-toggle-theme><i class="fa fa-sun"></i></a>
+</div>
+<div class="card-bottom ps-3 pe-3 mb-5 pb-4">
+<h1 class="color-white font-36">Recovered Cases</h1>
+<p class="color-white opacity-50">
+{{!-- This article will deploy from the top of the page. You can deploy articles from any part of the page you want. --}}
+</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+
+<div class="card card-style" style="margin: 0 5px 20px; margin-top:-100px;margin-bottom: -80px;z-index: 1;">
+<div class="content mb-0">
+<p class="text-center mb-n1 font-12 font-600 color-highlight">Andhra Pradesh Recovered Cases</p>
+<h1 class="text-center font-28 mb-4">Statistics</h1>
+<div class="chart-container mb-4" style="width:100%; height:350px;">
+<canvas class="graph" id="vertical-chart-2" /></canvas>
+</div>
+</div>
+</div>
+
+<div class="card rounded-0 bg-1" data-card-height="400">
+<div class="card-center">
+<h1 class="color-white font-italic text-center font-40">#STAY H<i class="fa fa-heart" style="color: crimson;"></i>ME</h1>
+<h1 class="font-italic text-center font-40" style="color: crimson;">#STAY S<svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="30px" fill="#fff" viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg>FE</h1>
+<p class="color-white text-center mb-0 mt-n2">With lots of Care and Love by {{siteName}}</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+</div>
+
+{{!-- popup-2 ending --}}
+
+
+
+{{!-- popup-3 --}}
+<div id="article-3" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
+<div class="card rounded-0 covidBg-1" data-card-height="500">
+<div class="card-top pt-4 ps-3 pe-3">
+<a href="#" class="close-menu icon icon-s rounded-l bg-theme color-theme "><i class="fa fa-arrow-up"></i></a>
+<a href="/home" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3"><i class="fa fa-home"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-dark" data-toggle-theme><i class="fa fa-sun"></i></a>
+</div>
+<div class="card-bottom ps-3 pe-3 mb-5 pb-4">
+<h1 class="color-white font-36">Active Cases</h1>
+<p class="color-white opacity-50">
+{{!-- This article will deploy from the top of the page. You can deploy articles from any part of the page you want. --}}
+</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+
+<div class="card card-style" style="margin: 0 5px 20px; margin-top:-100px;margin-bottom: -80px;z-index: 1;">
+<div class="content mb-0">
+<p class="text-center mb-n1 font-12 font-600 color-highlight">Andhra Pradesh Active Cases</p>
+<h1 class="text-center font-28 mb-4">Statistics</h1>
+<div class="chart-container mb-4" style="width:100%; height:350px;">
+<canvas class="graph" id="vertical-chart-3" /></canvas>
+</div>
+</div>
+</div>
+
+<div class="card rounded-0 bg-1" data-card-height="400">
+<div class="card-center">
+<h1 class="color-white font-italic text-center font-40">#STAY H<i class="fa fa-heart" style="color: crimson;"></i>ME</h1>
+<h1 class="font-italic text-center font-40" style="color: crimson;">#STAY S<svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="30px" fill="#fff" viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg>FE</h1>
+<p class="color-white text-center mb-0 mt-n2">With lots of Care and Love by {{siteName}}</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+</div>
+
+{{!-- popup-3 ending --}}
+
+
+
+
+{{!-- popup-4 --}}
+<div id="article-4" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
+<div class="card rounded-0 covidBg-2" data-card-height="500">
+<div class="card-top pt-4 ps-3 pe-3">
+<a href="#" class="close-menu icon icon-s rounded-l bg-theme color-theme "><i class="fa fa-arrow-up"></i></a>
+<a href="/home" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3"><i class="fa fa-home"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
+<a href="#" class="float-end icon icon-s rounded-l bg-theme color-theme ms-3 show-on-theme-dark" data-toggle-theme><i class="fa fa-sun"></i></a>
+</div>
+<div class="card-bottom ps-3 pe-3 mb-5 pb-4">
+<h1 class="color-white font-36">Death Cases</h1>
+<p class="color-white opacity-50">
+{{!-- This article will deploy from the top of the page. You can deploy articles from any part of the page you want. --}}
+</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+
+<div class="card card-style" style="margin: 0 5px 20px; margin-top:-100px;margin-bottom: -80px;z-index: 1;">
+<div class="content mb-0">
+<p class="text-center mb-n1 font-12 font-600 color-highlight">Andhra Pradesh Death Cases</p>
+<h1 class="text-center font-28 mb-4">Statistics</h1>
+<div class="chart-container mb-4" style="width:100%; height:350px;">
+<canvas class="graph" id="vertical-chart-4" /></canvas>
+</div>
+</div>
+</div>
+
+<div class="card rounded-0 bg-1" data-card-height="400">
+<div class="card-center">
+<h1 class="color-white font-italic text-center font-40">#STAY H<i class="fa fa-heart" style="color: crimson;"></i>ME</h1>
+<h1 class="font-italic text-center font-40" style="color: crimson;">#STAY S<svg class="homeIcon" xmlns="http://www.w3.org/2000/svg" width="30px" fill="#fff" viewBox="0 0 24 24" id="Bold"><path d="M12.345,5.215a.5.5,0,0,0-.69,0L2.629,13.829a1,1,0,0,0-.29.919L3.7,21.589A3.011,3.011,0,0,0,6.64,24H17.36A3.013,3.013,0,0,0,20.3,21.586l1.36-6.838a1,1,0,0,0-.29-.919ZM12,12.77A3.232,3.232,0,1,1,8.768,16,3.231,3.231,0,0,1,12,12.77Z"/><path d="M2.52,11.6l9.135-8.462a.505.505,0,0,1,.706.016L21.48,11.6a1.486,1.486,0,0,0,1.962.057,1.587,1.587,0,0,0,.159-.138A1.5,1.5,0,0,0,23.52,9.4l-9.1-8.43A3.49,3.49,0,0,0,9.6.956L.48,9.4A1.5,1.5,0,0,0,.4,11.522a1.478,1.478,0,0,0,.173.124A1.486,1.486,0,0,0,2.52,11.6Z"/></svg>FE</h1>
+<p class="color-white text-center mb-0 mt-n2">With lots of Care and Love by {{siteName}}</p>
+</div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+
+</div>
+
+{{!-- popup-4 ending --}}
+<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+<script>
+ 
+    $(document).ready(function(){
+ 
+ 
+$('#formid').submit(function(){
+
+
+var spinner = $('#loader');
+spinner.show();
+
+$.ajax({
+type:'POST',
+url:'/donateblood',
+data:$('#formid').serialize(),
+success:function(response){
+spinner.hide();
+//success.show();
+ alert(response);
+$('.hidden').html(response);
+}
+});
+var form=document.getElementById('formid').reset();
+return false;
+
+
+});
+});
+</script>
+</body>

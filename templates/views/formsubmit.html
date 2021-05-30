@@ -1,0 +1,26 @@
+<script>
+    $(document).ready(function(){
+    $('#formid').submit(function(){
+    
+    
+    var spinner = $('#loader');
+    spinner.show();
+    
+    $.ajax({
+    type:'POST',
+    url:'/donateblood',
+    data:$('#formid').serialize(),
+    success:function(response){
+    spinner.hide();
+    
+    $('.hidden').html(response);
+    }
+    });
+    var form=document.getElementById('formid').reset();
+    return false;
+    
+    
+    });
+    });
+    
+    </script>

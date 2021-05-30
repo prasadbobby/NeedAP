@@ -1,0 +1,36 @@
+{
+  "name": "needap",
+  "version": "1.0.0",
+  "description": "Need AP application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js -e js,hbs,svg,css",
+    "start": "node index.js"
+  },
+  "author": "Prasad Bobby",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/ncc": "^0.28.6",
+    "axios": "^0.21.1",
+    "cloudinary": "^1.25.1",
+    "cookie-session": "^1.4.0",
+    "dompurify": "^2.2.8",
+    "dotenv": "^9.0.0",
+    "express": "^4.17.1",
+    "firebase": "^8.6.0",
+    "firebase-admin": "^9.8.0",
+    "firebase-functions": "^3.14.0",
+    "hbs": "^4.1.2",
+    "javascript-time-ago": "^2.3.4",
+    "mailgun-js": "^0.22.0",
+    "moment": "^2.29.1",
+    "mongoose": "^5.12.7",
+    "node-localstorage": "^2.1.6",
+    "nodemailer": "^6.6.0",
+    "passport": "^0.4.1",
+    "passport-google-oauth2": "^0.2.0",
+    "serverless-http": "^2.7.0",
+    "store2": "^2.12.0"
+  }
+}
