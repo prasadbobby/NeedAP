@@ -5,7 +5,10 @@ require("./src/db/conn");
 const serverless = require('serverless-http');
 const usersData = require("./src/models/usersData");
 // require("./mail");
+const { range } = require("balanced-match");
+const { google } = require("googleapis");
 const { ensureAuth, ensureGuest } = require('./middleware/auth');
+var xls = require('excel');
 var nodemailer = require('nodemailer');
 const path = require("path");
 const express = require("express");
@@ -1121,6 +1124,84 @@ app.get('/requestslist',ensureAuth, async (request,response) =>{
 setTimeout(timedOut, 1000);
 
     });
+
+
+
+
+
+
+    app.get("/new", ensureAuth, async (req, res) => {
+      
+        const auth = new google.auth.GoogleAuth({
+          keyFile: "credentials.json",
+          scopes: "https://www.googleapis.com/auth/spreadsheets",
+        });
+      
+        // Create client instance for auth
+        const client = await auth.getClient();
+      
+        // Instance of Google Sheets API
+        const googleSheets = google.sheets({ version: "v4", auth: client });
+      
+        const spreadsheetId = "1SXBaISO7rlmxBkEhS7Gz98BtCQSJLs9JyV3RKDE4KEc";
+      
+        // Get metadata about spreadsheet
+        const metaData = await googleSheets.spreadsheets.get({
+          auth,
+          spreadsheetId,
+        });
+        // res.send(metaData.data);
+      
+        // Read rows from spreadsheet
+        const getRows = await googleSheets.spreadsheets.values.get({
+          auth,
+          spreadsheetId,
+          // range: "Sheet1!A:A",
+          range: "Sheet For Users!A:F",
+        });
+      
+       let specRows = getRows.data.values;
+       specRows.splice(0,7);
+       let newSep = []
+        for (const d of specRows){
+          if(d[2] == 'Andhra Pradesh'){
+            t={
+              "name":d[0],
+              "phno":d[1].slice(0,10),
+              "state":d[2],
+              "district":d[3],
+              "status":d[4],
+              "lastUpdated":d[5],
+            }
+            newSep.push(t);
+          }
+      
+        
+        }
+      //  console.log(newSep);
+    //   for(const b of newSep){
+    //     console.log(b.name);
+    //   }
+        res.render('new',{
+            oxygensList:newSep, 
+        });
+      
+      });
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
