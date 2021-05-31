@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
-<title>{{siteName}} - News Feed</title>
+<title>{{siteName}} - Oxygen availability</title>
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
 <meta name="author" content="Prasad Bobby">
@@ -42,6 +43,8 @@
 </script>
 <link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/custom.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css">
 <link rel="manifest" href="_manifest.json" data-pwa-version="1.0">
@@ -49,6 +52,7 @@
 </head>
 <body class="theme-light">
 <div id="preloader"><div class="spinner-border color-highlight" role="status"></div></div>
+
 <div id="page">
 <div class="header header-auto-show header-fixed header-logo-center">
 <a href="/home" class="header-title">{{siteName}}</a>
@@ -64,56 +68,202 @@
 
 <a href="/vaccine"><i class="fas fa-virus"></i><span>Vaccine</span></a>
 <a href="/donate"><i class="fa fa-heart"></i><span>Donate</span></a>
-{{!-- <a href="/features"><i class="fa fa-star"></i><span>Features</span></a> --}}
+{{!-- <a href="/features" ><i class="fa fa-star"></i><span>Features</span></a> --}}
 <a href="/donorslist"><i class="fas fa-chart-line"></i><span>Donors list</span></a>
-<a href="/feed"  class="active-nav"><i class="fas fa-rss"></i><span>Feed</span><strong></strong></a>
+<a href="/feed"><i class="fas fa-rss"></i><span>Feed</span></a>
 </div>
 <div class="page-title page-title-fixed">
-<h1 class="font-24">{{siteName}}</h1>
+<h1>{{siteName}}</h1>
 <a href="#" class="page-title-icon shadow-xl bg-theme color-theme" data-menu="menu-share"><i class="fa fa-share-alt"></i></a>
 <a href="#" class="page-title-icon shadow-xl bg-theme color-theme show-on-theme-light" data-toggle-theme><i class="fa fa-moon"></i></a>
 <a href="#" class="page-title-icon shadow-xl bg-theme color-theme show-on-theme-dark" data-toggle-theme><i class="fa fa-lightbulb color-yellow-dark"></i></a>
 <a href="#" class="page-title-icon shadow-xl bg-theme color-theme" data-menu="menu-main"><i class="fa fa-bars"></i></a>
 </div>
 <div class="page-title-clear"></div>
+
 <div class="page-content">
+    
+<div class="content mt-n3 mb-4">
+<div class="search-box search-dark shadow-m border-0 mt-4 bg-theme rounded-m bottom-0">
+<i class="fa fa-search ms-1"></i>
+<input type="text" class="border-0" placeholder="Searching for Oxygen? Try 'Name or Location'" data-search>
+</div>
+<div class="search-results disabled-search-list">
 
-{{!-- {{#each Contacts}} --}}
-{{!-- <div class="card card-style content" data-card-height="170">
-<div class="card-center ps-3" style="margin-top: -20px;">
-<span class="badge gradient-red color-white">Info</span>
-<span class="color-black"> 05/22/2021 05:03 AM</span>
-<h3 class="color-red mb-n1 font-15">Who is more likely to get Mucormycosis?</h3>
-<h5 class="color-red opacity-50 mb-0 font-12">The fungi causing  mucoromycosis Can be easily inhaled from the air, they can plant.</h5>
-</div> --}}
-{{!-- <a href="tel:{{this.number}}" class="external-link shadow-call"> --}}
-{{!-- <div class="card-bottom" style="padding-bottom: 0.8rem!important; padding-right: 0rem!important; margin-left:16px;">
-<img src="https://lh3.googleusercontent.com/a-/AOh14GhyqfwRa-pjVqvmBt7fTmKaMPgFZH7XibKV9dEk=s96-c" width="40px" height="40px" class="icon icon-s float-start me-1 rounded-xl shadow-l">
-<h6 class="font-14" style="margin-top: 12px;">NeedAP Admin</h6>
-</div> --}}
-{{!-- </a> --}}
 
-{{!-- </div> --}}
-{{!-- {{/each}} --}}
+<div>
+
+    
+
+
+
+    
+    
 {{#each oxygensList}}
-<div class="card card-style shadow-xl">
+
+<div class="card card-style mt-4 m-0 lozad"  data-filter-item data-filter-name="{{this.name}} {{this.location}} {{this.phno}} {{this.status}} all">
+<div class="content mb-0">
+<h1 class="font-18 font-800 mb-0" style=" text-transform: capitalize;">{{this.name}}</h1>
+
+<div class="content mt-3">
+<div class="d-flex ">
+<div style="margin-left: -14px;">
+<h5 class="font-18" style=" text-transform: capitalize;">{{this.location}}</h5>
+<p class="mb-0 mt-n2 font-15">{{this.phno}}</p>
+</div>
+<div class="ms-auto">
+<a href="http://maps.google.com/maps?q={{this.name}}, {{this.location}}" target="_blank" class="icon icon-s bg-theme shadow-xl rounded-xl float-end external-link"><i class="fa fa-map-marker color-red-dark"></i></a>
+<a href="tel:{{this.phno}}" class="icon icon-s bg-theme shadow-xl rounded-xl float-end me-2 external-link">
+<i class="color-green-dark fas fa-phone-alt"></i></a>
+</div>
+</div>
+</div>
+<div class="divider mb-3"></div>
+<div class="d-flex mb-4">
+<div class="align-self-center">
+<h2 class="font-15 line-height-s mt-1 mb-1">Status</h2>
+</div>
+<div class="ms-auto ps-3 align-self-center text-center">
+<h2 class="font-14 mb-0">{{this.status}}</h2>
+</div>
+</div>
+<div class="d-flex mb-4">
+<div class="align-self-center">
+<h2 class="font-15 line-height-s mt-1 mb-1">Last Updated</h2>
+</div>
+<div class="ms-auto ps-3 align-self-center text-center">
+<h2 class="font-13 mb-0">{{this.lastUpdated}}</h2>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+{{/each }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+</div>
+<div class="search-no-results disabled mt-4">
+<div class="card card-style">
 <div class="content">
-{{!-- <span class="badge gradient-red color-white">{{this.type}}</span> --}}
-<span class="color-black"> {{this.phno}}</span>
-
-<h3 class="font-18 font-700 mb-2">{{this.name}}</h3>
-<p class="mb-1">{{this.state}}</p>
-<p class="mb-1">{{this.district}}</p>
-<p class="mb-1">{{this.status}}</p>
-<p class="mb-1">{{this.lastUpdated}}</p>
+<h1>No Results</h1>
+<p>
+Your search brought up no results. Try using a different keyword. Or try typing all
+to see all Oxygen centers list.
+</p>
 </div>
 </div>
-{{/each}}
-<div data-menu-load="/menu-footer"></div>
+</div>
+<div class="card card-style oxygen-1 lozad" data-card-height="300">
+<div class="card-top px-3 py-3">
+<a href="#" data-menu="menu-heart" class="bg-white rounded-sm icon icon-xs float-end"><i class="fa fa-heart color-red-dark"></i></a>
+</div>
+<div class="card-bottom px-3 py-3">
+<h1 class="color-white">Oxygen Availability</h1>
+</div>
+<div class="card-overlay bg-gradient opacity-30"></div>
+<div class="card-overlay bg-gradient"></div>
+</div>
+<div class="content my-0">
+<h6 class="font-15 font-600 mb-n1"> <strong class="color-highlight">Note</strong>.We are Collecting these data from Volunteers who are dedicated to help individuals and families in such challenging times.</h6>
+ <div class="divider mt-4"></div>
+</div>
+<div class="content">
+
+
+
+
+
+    
+{{#each oxygensList}}
+
+<div class="card card-style mt-4 m-0 lozad"  data-filter-item data-filter-name="{{this.name}} {{this.location}} {{this.phno}} {{this.status}}">
+<div class="content mb-0">
+<h1 class="font-18 font-800 mb-0" style=" text-transform: capitalize;">{{this.name}}</h1>
+
+<div class="content mt-3">
+<div class="d-flex ">
+<div style="margin-left: -14px;">
+<h5 class="font-18" style=" text-transform: capitalize;">{{this.location}}</h5>
+<p class="mb-0 mt-n2 font-15">{{this.phno}}</p>
+</div>
+<div class="ms-auto">
+<a href="http://maps.google.com/maps?q={{this.name}}, {{this.location}}" target="_blank" class="icon icon-s bg-theme shadow-xl rounded-xl float-end external-link"><i class="fa fa-map-marker color-red-dark"></i></a>
+<a href="tel:{{this.phno}}" class="icon icon-s bg-theme shadow-xl rounded-xl float-end me-2 external-link">
+<i class="color-green-dark fas fa-phone-alt"></i></a>
+</div>
+</div>
+</div>
+<div class="divider mb-3"></div>
+<div class="d-flex mb-4">
+<div class="align-self-center">
+<h2 class="font-15 line-height-s mt-1 mb-1">Status</h2>
+</div>
+<div class="ms-auto ps-3 align-self-center text-center">
+<h2 class="font-14 mb-0">{{this.status}}</h2>
+</div>
+</div>
+<div class="d-flex mb-4">
+<div class="align-self-center">
+<h2 class="font-15 line-height-s mt-1 mb-1">Last Updated</h2>
+</div>
+<div class="ms-auto ps-3 align-self-center text-center">
+<h2 class="font-13 mb-0">{{this.lastUpdated}}</h2>
+</div>
+</div>
+
+</div>
 </div>
 
 
-<div id="menu-main" class="menu menu-box-left rounded-0" data-menu-load="/menu-main" data-menu-width="280"></div>
+
+{{/each }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</div>
+
+
+<div id="menu-heart" class="menu menu-box-modal rounded-m" data-menu-hide="1000" data-menu-width="250" data-menu-height="170">
+<h1 class="text-center mt-3 pt-2">
+<i class="fa fa-heart color-red-dark fa-3x scale-icon"></i>
+</h1>
+<h3 class="text-center pt-2">Saved to Favorites</h3>
+</div>
+
+<div id="menu-main" class="menu menu-box-left rounded-0" data-menu-load="/menu-main" data-menu-width="280" data-menu-active="nav-beds"></div>
 
 <div id="menu-share" class="menu menu-box-bottom rounded-m" data-menu-load="/menu-share" data-menu-height="370"></div>
 <div id="menu-feedback" class="menu menu-box-bottom rounded-m" data-menu-load="/menu-feedback" data-menu-height="452" data-menu-effect="menu-over"></div>
@@ -300,5 +450,4 @@
 
 {{!-- popup-4 ending --}}
 <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
-<script type="text/javascript" src="scripts/custom.js"></script>
 </body>

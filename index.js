@@ -1,29 +1,29 @@
 // 'use strict';
-require('dotenv').config()
+require("dotenv").config();
 require("./src/db/conn");
 // require('newrelic');
-const serverless = require('serverless-http');
+const serverless = require("serverless-http");
 const usersData = require("./src/models/usersData");
 // require("./mail");
 const { range } = require("balanced-match");
 const { google } = require("googleapis");
-const { ensureAuth, ensureGuest } = require('./middleware/auth');
-var xls = require('excel');
-var nodemailer = require('nodemailer');
+const { ensureAuth, ensureGuest } = require("./middleware/auth");
+var xls = require("excel");
+var nodemailer = require("nodemailer");
 const path = require("path");
 const express = require("express");
-const passport = require('passport');
-const cookieSession = require('cookie-session')
-require('./passport-setup');
-const moment = require('moment');
+const passport = require("passport");
+const cookieSession = require("cookie-session");
+require("./passport-setup");
+const moment = require("moment");
 const hbs = require("hbs");
 const app = express();
-const port = process.env.PORT || 3000
-const siteTitle ="Need AP"
-const axios = require('axios');
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-var dist={}
+const port = process.env.PORT || 3000;
+const siteTitle = "Need AP";
+const axios = require("axios");
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+var dist = {};
 let date_ob = new Date();
 let date = ("0" + date_ob.getDate()).slice(-2);
 let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
@@ -31,429 +31,456 @@ let year = date_ob.getFullYear();
 let hours = date_ob.getHours();
 let minutes = date_ob.getMinutes();
 let seconds = date_ob.getSeconds();
-let currentDate =date + "-" + month + "-" + year
-let siteDate =year + "-" + month + "-" + date
-let timeMeridian = date_ob.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-let formatedDate = date + "/" + month + "/" + year + "  " +timeMeridian
+let currentDate = date + "-" + month + "-" + year;
+let siteDate = year + "-" + month + "-" + date;
+let timeMeridian = date_ob.toLocaleString("en-US", {
+  hour: "numeric",
+  minute: "numeric",
+  hour12: true,
+});
+let formatedDate = date + "/" + month + "/" + year + "  " + timeMeridian;
 console.log(formatedDate);
-var relative= moment().startOf().fromNow();  
-var unixTimeStamp = + new Date()
+var relative = moment().startOf().fromNow();
+var unixTimeStamp = +new Date();
 
-
-
-
-
-function dynamicsort(property,order) {
-    var sort_order = 1;
-    if(order === "desc"){
-        sort_order = -1;
+function dynamicsort(property, order) {
+  var sort_order = 1;
+  if (order === "desc") {
+    sort_order = -1;
+  }
+  return function (a, b) {
+    if (a[property] < b[property]) {
+      return -1 * sort_order;
+    } else if (a[property] > b[property]) {
+      return 1 * sort_order;
+    } else {
+      return 0 * sort_order;
     }
-    return function (a, b){
-        if(a[property] < b[property]){
-                return -1 * sort_order;
-        }else if(a[property] > b[property]){
-                return 1 * sort_order;
-        }else{
-                return 0 * sort_order;
-        }
-    }
+  };
 }
-
-
 
 const staticPath = path.join(__dirname, "./public");
 const templatePath = path.join(__dirname, "./templates/views");
 app.use(express.static(staticPath));
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));
-app.set('view engine', 'hbs');
+app.use(express.urlencoded({ extended: false }));
+app.set("view engine", "hbs");
 app.set("views", templatePath);
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-app.use(cookieSession({
-    name: 'NeedAP-session',
-    keys: ['key1', 'key2'],
-    maxAge: 168 * 60 * 60 * 1000
-  }))
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+app.use(
+  cookieSession({
+    name: "NeedAP-session",
+    keys: ["key1", "key2"],
+    maxAge: 168 * 60 * 60 * 1000,
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
-app.get('/failed', (req, res) => res.send('You Failed to log in!'))
-app.get("/", ensureGuest, (req, res) =>{
-    res.render("index",{
-        siteName: siteTitle
-    });
-})
-app.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
-async(req, res) =>{
-const mail = req.user.emails[0].value;
-const userdata = await usersData.findOne({email:mail});
-if(userdata != null && userdata.email == mail){
-    res.redirect('/home');            
-}
-else{
-    try{    
-        const userAdd = new usersData({
-            clientId:  req.user.id,
-            fullName: req.user.displayName,
-            email: req.user.emails[0].value,
-            img: req.user.photos[0].value
-        })
-        const userAdded = await userAdd.save();
-        res.redirect('/home');
-        var mailOptions = {
-            name: 'Need AP',
-            from: 'NeedAP <need.andhrapradesh@gmail.com>',
-            replyTo: 'No Reply <no-reply@needap.in>',
-            to: req.user.emails[0].value,
-            subject: `Hey ${req.user.displayName} thank you for registering on Need AP.🎉`,
-            html: htmlemail 
-           
-         
-         };
-         var sendmail = nodemailer.createTransport({
-            service: 'gmail',
-            secure: false,
-            auth: {
-              user: 'need.andhrapradesh@gmail.com',
-              pass: 'Needap@6100'
-            }
-          });
-         sendmail.sendMail(mailOptions, function(error, info){
-               if (error) {
-                 console.log(error);
-               } else {
-                 console.log('Email sent: ' + info.response);
-               }
-         });
-}catch(error){
-    res.redirect("/");
-    console.log(error);
- }
-} 
+app.get("/failed", (req, res) => res.send("You Failed to log in!"));
+app.get("/", ensureGuest, (req, res) => {
+  res.render("index", {
+    siteName: siteTitle,
+  });
 });
+app.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
-axios.get('https://api.covid19india.org/state_district_wise.json')
+app.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/failed" }),
+  async (req, res) => {
+    const mail = req.user.emails[0].value;
+    const userdata = await usersData.findOne({ email: mail });
+    if (userdata != null && userdata.email == mail) {
+      res.redirect("/home");
+    } else {
+      try {
+        const userAdd = new usersData({
+          clientId: req.user.id,
+          fullName: req.user.displayName,
+          email: req.user.emails[0].value,
+          img: req.user.photos[0].value,
+        });
+        const userAdded = await userAdd.save();
+        res.redirect("/home");
+        var mailOptions = {
+          name: "Need AP",
+          from: "NeedAP <need.andhrapradesh@gmail.com>",
+          replyTo: "No Reply <no-reply@needap.in>",
+          to: req.user.emails[0].value,
+          subject: `Hey ${req.user.displayName} thank you for registering on Need AP.🎉`,
+          html: htmlemail,
+        };
+        var sendmail = nodemailer.createTransport({
+          service: "gmail",
+          secure: false,
+          auth: {
+            user: "need.andhrapradesh@gmail.com",
+            pass: "Needap@6100",
+          },
+        });
+        sendmail.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        });
+      } catch (error) {
+        res.redirect("/");
+        console.log(error);
+      }
+    }
+  }
+);
+
+axios
+  .get("https://api.covid19india.org/state_district_wise.json")
   .then(function (response) {
     const ap = response.data["Andhra Pradesh"].districtData;
-    casesFunc(ap)
-    let totalConfirmed=0, totalRecovered=0, totalDeaths=0, totalActive=0;
+    casesFunc(ap);
+    let totalConfirmed = 0,
+      totalRecovered = 0,
+      totalDeaths = 0,
+      totalActive = 0;
     for (const property in ap) {
-        if(property !== 'Foreign Evacuees' && property !== 'Other State'){
-            totalConfirmed+=ap[property].confirmed;
-            totalRecovered+=ap[property].recovered;
-            totalDeaths+=ap[property].deceased;
-            totalActive+=ap[property].active;
-        }
+      if (property !== "Foreign Evacuees" && property !== "Other State") {
+        totalConfirmed += ap[property].confirmed;
+        totalRecovered += ap[property].recovered;
+        totalDeaths += ap[property].deceased;
+        totalActive += ap[property].active;
+      }
     }
-    app.get('/home', ensureAuth, (req, res) =>{
-        res.render("home",{
-            siteName: siteTitle,
-            name:req.user.displayName,
-            img:req.user.photos[0].value,
-            email:req.user.emails[0].value,
-            siteDate: siteDate,
-            confirm: totalConfirmed.toLocaleString(),
-            recovered: totalRecovered.toLocaleString(),
-            active: totalActive.toLocaleString(),
-            deaths: totalDeaths.toLocaleString(),
-            AnantapurConfirmedCases: dist['Anantapur'].confirmed.toLocaleString(),
-            AnantapurRecoveredCases: dist['Anantapur'].recovered.toLocaleString(),
-            AnantapurDeceasedCases: dist['Anantapur'].deceased.toLocaleString(),
-            AnantapurActiveCases: dist['Anantapur'].active.toLocaleString(),
-            AnantapurTitle1: "Anantapur",
-            AnantapurTitle2: "anantapur",
-            ChittoorConfirmedCases: dist['Chittoor'].confirmed.toLocaleString(),
-            ChittoorRecoveredCases: dist['Chittoor'].recovered.toLocaleString(),
-            ChittoorDeceasedCases: dist['Chittoor'].deceased.toLocaleString(),
-            ChittoorActiveCases: dist['Chittoor'].active.toLocaleString(),
-            ChittoorTitle1: "Chittoor",
-            ChittoorTitle2: "chittoor",
-            EastGodavariConfirmedCases: dist['East Godavari'].confirmed.toLocaleString(),
-            EastGodavariRecoveredCases: dist['East Godavari'].recovered.toLocaleString(),
-            EastGodavariDeceasedCases: dist['East Godavari'].deceased.toLocaleString(),
-            EastGodavariActiveCases: dist['East Godavari'].active.toLocaleString(),
-            EastGodavariTitle1: "East Godavari",
-            EastGodavariTitle2: "east godavari",
-            GunturConfirmedCases: dist['Guntur'].confirmed.toLocaleString(),
-            GunturRecoveredCases: dist['Guntur'].recovered.toLocaleString(),
-            GunturDeceasedCases: dist['Guntur'].deceased.toLocaleString(),
-            GunturActiveCases: dist['Guntur'].active.toLocaleString(),
-            GunturTitle1: "Guntur",
-            GunturTitle2: "guntur",
-            KrishnaConfirmedCases: dist['Krishna'].confirmed.toLocaleString(),
-            KrishnaRecoveredCases: dist['Krishna'].recovered.toLocaleString(),
-            KrishnaDeceasedCases: dist['Krishna'].deceased.toLocaleString(),
-            KrishnaActiveCases: dist['Krishna'].active.toLocaleString(),
-            KrishnaTitle1: "Krishna",
-            KrishnaTitle2: "krishna",
-            KurnoolConfirmedCases: dist['Kurnool'].confirmed.toLocaleString(),
-            KurnoolRecoveredCases: dist['Kurnool'].recovered.toLocaleString(),
-            KurnoolDeceasedCases: dist['Kurnool'].deceased.toLocaleString(),
-            KurnoolActiveCases: dist['Kurnool'].active.toLocaleString(),
-            KurnoolTitle1: "Kurnool",
-            KurnoolTitle2: "kurnool",
-            PrakasamConfirmedCases: dist['Prakasam'].confirmed.toLocaleString(),
-            PrakasamRecoveredCases: dist['Prakasam'].recovered.toLocaleString(),
-            PrakasamDeceasedCases: dist['Prakasam'].deceased.toLocaleString(),
-            PrakasamActiveCases: dist['Prakasam'].active.toLocaleString(),
-            PrakasamTitle1: "Prakasam",
-            PrakasamTitle2: "prakasam",
-            NelloreConfirmedCases: dist['S.P.S. Nellore'].confirmed.toLocaleString(),
-            NelloreRecoveredCases: dist['S.P.S. Nellore'].recovered.toLocaleString(),
-            NelloreDeceasedCases: dist['S.P.S. Nellore'].deceased.toLocaleString(),
-            NelloreActiveCases: dist['S.P.S. Nellore'].active.toLocaleString(),
-            NelloreTitle1: "Nellore",
-            NelloreTitle2: "nellore",
-            SrikakulamConfirmedCases: dist['Srikakulam'].confirmed.toLocaleString(),
-            SrikakulamRecoveredCases: dist['Srikakulam'].recovered.toLocaleString(),
-            SrikakulamDeceasedCases: dist['Srikakulam'].deceased.toLocaleString(),
-            SrikakulamActiveCases: dist['Srikakulam'].active.toLocaleString(),
-            SrikakulamTitle1: "Srikakulam",
-            SrikakulamTitle2: "srikakulam",
-            VisakhapatnamConfirmedCases: dist['Visakhapatnam'].confirmed.toLocaleString(),
-            VisakhapatnamRecoveredCases: dist['Visakhapatnam'].recovered.toLocaleString(),
-            VisakhapatnamDeceasedCases: dist['Visakhapatnam'].deceased.toLocaleString(),
-            VisakhapatnamActiveCases: dist['Visakhapatnam'].active.toLocaleString(),
-            VisakhapatnamTitle1: "Visakhapatnam",
-            VisakhapatnamTitle2: "visakhapatnam",
-            VizianagaramConfirmedCases: dist['Vizianagaram'].confirmed.toLocaleString(),
-            VizianagaramRecoveredCases: dist['Vizianagaram'].recovered.toLocaleString(),
-            VizianagaramDeceasedCases: dist['Vizianagaram'].deceased.toLocaleString(),
-            VizianagaramActiveCases: dist['Vizianagaram'].active.toLocaleString(),
-            VizianagaramTitle1: "Vizianagaram",
-            VizianagaramTitle2: "vizianagaram",
-            WestGodavariConfirmedCases: dist['West Godavari'].confirmed.toLocaleString(),
-            WestGodavariRecoveredCases: dist['West Godavari'].recovered.toLocaleString(),
-            WestGodavariDeceasedCases: dist['West Godavari'].deceased.toLocaleString(),
-            WestGodavariActiveCases: dist['West Godavari'].active.toLocaleString(),
-            WestGodavariTitle1: "West Godavari",
-            WestGodavariTitle2: "west godavari",
-            KadapaConfirmedCases: dist['Y.S.R. Kadapa'].confirmed.toLocaleString(),
-            KadapaRecoveredCases: dist['Y.S.R. Kadapa'].recovered.toLocaleString(),
-            KadapaDeceasedCases: dist['Y.S.R. Kadapa'].deceased.toLocaleString(),
-            KadapaActiveCases: dist['Y.S.R. Kadapa'].active.toLocaleString(),
-            KadapaTitle1: "Kadapa",
-            KadapaTitle2: "kadapa"
-         })
-    })   
+    app.get("/home", ensureAuth, (req, res) => {
+      res.render("home", {
+        siteName: siteTitle,
+        name: req.user.displayName,
+        img: req.user.photos[0].value,
+        email: req.user.emails[0].value,
+        siteDate: siteDate,
+        confirm: totalConfirmed.toLocaleString(),
+        recovered: totalRecovered.toLocaleString(),
+        active: totalActive.toLocaleString(),
+        deaths: totalDeaths.toLocaleString(),
+        AnantapurConfirmedCases: dist["Anantapur"].confirmed.toLocaleString(),
+        AnantapurRecoveredCases: dist["Anantapur"].recovered.toLocaleString(),
+        AnantapurDeceasedCases: dist["Anantapur"].deceased.toLocaleString(),
+        AnantapurActiveCases: dist["Anantapur"].active.toLocaleString(),
+        AnantapurTitle1: "Anantapur",
+        AnantapurTitle2: "anantapur",
+        ChittoorConfirmedCases: dist["Chittoor"].confirmed.toLocaleString(),
+        ChittoorRecoveredCases: dist["Chittoor"].recovered.toLocaleString(),
+        ChittoorDeceasedCases: dist["Chittoor"].deceased.toLocaleString(),
+        ChittoorActiveCases: dist["Chittoor"].active.toLocaleString(),
+        ChittoorTitle1: "Chittoor",
+        ChittoorTitle2: "chittoor",
+        EastGodavariConfirmedCases:
+          dist["East Godavari"].confirmed.toLocaleString(),
+        EastGodavariRecoveredCases:
+          dist["East Godavari"].recovered.toLocaleString(),
+        EastGodavariDeceasedCases:
+          dist["East Godavari"].deceased.toLocaleString(),
+        EastGodavariActiveCases: dist["East Godavari"].active.toLocaleString(),
+        EastGodavariTitle1: "East Godavari",
+        EastGodavariTitle2: "east godavari",
+        GunturConfirmedCases: dist["Guntur"].confirmed.toLocaleString(),
+        GunturRecoveredCases: dist["Guntur"].recovered.toLocaleString(),
+        GunturDeceasedCases: dist["Guntur"].deceased.toLocaleString(),
+        GunturActiveCases: dist["Guntur"].active.toLocaleString(),
+        GunturTitle1: "Guntur",
+        GunturTitle2: "guntur",
+        KrishnaConfirmedCases: dist["Krishna"].confirmed.toLocaleString(),
+        KrishnaRecoveredCases: dist["Krishna"].recovered.toLocaleString(),
+        KrishnaDeceasedCases: dist["Krishna"].deceased.toLocaleString(),
+        KrishnaActiveCases: dist["Krishna"].active.toLocaleString(),
+        KrishnaTitle1: "Krishna",
+        KrishnaTitle2: "krishna",
+        KurnoolConfirmedCases: dist["Kurnool"].confirmed.toLocaleString(),
+        KurnoolRecoveredCases: dist["Kurnool"].recovered.toLocaleString(),
+        KurnoolDeceasedCases: dist["Kurnool"].deceased.toLocaleString(),
+        KurnoolActiveCases: dist["Kurnool"].active.toLocaleString(),
+        KurnoolTitle1: "Kurnool",
+        KurnoolTitle2: "kurnool",
+        PrakasamConfirmedCases: dist["Prakasam"].confirmed.toLocaleString(),
+        PrakasamRecoveredCases: dist["Prakasam"].recovered.toLocaleString(),
+        PrakasamDeceasedCases: dist["Prakasam"].deceased.toLocaleString(),
+        PrakasamActiveCases: dist["Prakasam"].active.toLocaleString(),
+        PrakasamTitle1: "Prakasam",
+        PrakasamTitle2: "prakasam",
+        NelloreConfirmedCases:
+          dist["S.P.S. Nellore"].confirmed.toLocaleString(),
+        NelloreRecoveredCases:
+          dist["S.P.S. Nellore"].recovered.toLocaleString(),
+        NelloreDeceasedCases: dist["S.P.S. Nellore"].deceased.toLocaleString(),
+        NelloreActiveCases: dist["S.P.S. Nellore"].active.toLocaleString(),
+        NelloreTitle1: "Nellore",
+        NelloreTitle2: "nellore",
+        SrikakulamConfirmedCases: dist["Srikakulam"].confirmed.toLocaleString(),
+        SrikakulamRecoveredCases: dist["Srikakulam"].recovered.toLocaleString(),
+        SrikakulamDeceasedCases: dist["Srikakulam"].deceased.toLocaleString(),
+        SrikakulamActiveCases: dist["Srikakulam"].active.toLocaleString(),
+        SrikakulamTitle1: "Srikakulam",
+        SrikakulamTitle2: "srikakulam",
+        VisakhapatnamConfirmedCases:
+          dist["Visakhapatnam"].confirmed.toLocaleString(),
+        VisakhapatnamRecoveredCases:
+          dist["Visakhapatnam"].recovered.toLocaleString(),
+        VisakhapatnamDeceasedCases:
+          dist["Visakhapatnam"].deceased.toLocaleString(),
+        VisakhapatnamActiveCases: dist["Visakhapatnam"].active.toLocaleString(),
+        VisakhapatnamTitle1: "Visakhapatnam",
+        VisakhapatnamTitle2: "visakhapatnam",
+        VizianagaramConfirmedCases:
+          dist["Vizianagaram"].confirmed.toLocaleString(),
+        VizianagaramRecoveredCases:
+          dist["Vizianagaram"].recovered.toLocaleString(),
+        VizianagaramDeceasedCases:
+          dist["Vizianagaram"].deceased.toLocaleString(),
+        VizianagaramActiveCases: dist["Vizianagaram"].active.toLocaleString(),
+        VizianagaramTitle1: "Vizianagaram",
+        VizianagaramTitle2: "vizianagaram",
+        WestGodavariConfirmedCases:
+          dist["West Godavari"].confirmed.toLocaleString(),
+        WestGodavariRecoveredCases:
+          dist["West Godavari"].recovered.toLocaleString(),
+        WestGodavariDeceasedCases:
+          dist["West Godavari"].deceased.toLocaleString(),
+        WestGodavariActiveCases: dist["West Godavari"].active.toLocaleString(),
+        WestGodavariTitle1: "West Godavari",
+        WestGodavariTitle2: "west godavari",
+        KadapaConfirmedCases: dist["Y.S.R. Kadapa"].confirmed.toLocaleString(),
+        KadapaRecoveredCases: dist["Y.S.R. Kadapa"].recovered.toLocaleString(),
+        KadapaDeceasedCases: dist["Y.S.R. Kadapa"].deceased.toLocaleString(),
+        KadapaActiveCases: dist["Y.S.R. Kadapa"].active.toLocaleString(),
+        KadapaTitle1: "Kadapa",
+        KadapaTitle2: "kadapa",
+      });
+    });
   })
   .catch(function (error) {
     console.log(error);
-  })
-
+  });
 
 // console.log(dist)
 
-
-
-
-
-
-
-
-  axios.get('https://covidaps.com/data/covidaps.com/bed_data.json')
+axios
+  .get("https://covidaps.com/data/covidaps.com/bed_data.json")
   .then(function (response) {
     // console.log(response)
-    separateBeds(response.data)
+    separateBeds(response.data);
   })
   .catch(function (error) {
     console.log(error);
-  })
- 
-    app.get("/beds", ensureAuth, (req, res) =>{
-        res.render("beds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            AnantapurBedsData: districtBedsData.Anantapur,
-            ChittoorBedsData: districtBedsData.Chittoor,
-            EastgodavariBedsData: districtBedsData['East godavari'],
-            GunturBedsData: districtBedsData.Guntur,
-            KrishnaBedsData: districtBedsData.Krishna,
-            KurnoolBedsData: districtBedsData.Kurnool,
-            PrakasamBedsData: districtBedsData.Prakasam,
-            NelloreBedsData: districtBedsData['Spsr nellore'],
-            SrikakulamBedsData: districtBedsData.Srikakulam,
-            VisakhapatanamBedsData: districtBedsData.Visakhapatanam,
-            VizianagaramBedsData: districtBedsData.Vizianagaram,
-            WestgodavariBedsData: districtBedsData['West godavari'],
-            KadapaBedsData: districtBedsData['Y.s.r.'],
-        });
-    })
-    app.get("/anantapurbeds", ensureAuth, (req, res) =>{
-        res.render("district/anantapurbeds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            AnantapurBedsData: districtBedsData.Anantapur,
-        });
-    })
-    app.get("/chittoorbeds", ensureAuth, (req, res) =>{
-        res.render("district/chittoorbeds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            ChittoorBedsData: districtBedsData.Chittoor,
-        });
-    })
-    app.get("/eastgodavaribeds", ensureAuth, (req, res) =>{
-        res.render("district/eastgodavaribeds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            EastgodavariBedsData: districtBedsData['East godavari'],
-        });
-    })
-    app.get("/gunturbeds", ensureAuth, (req, res) =>{
-        res.render("district/gunturbeds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            GunturBedsData: districtBedsData.Guntur,
-        });
-    })
-    app.get("/krishnabeds", ensureAuth, (req, res) =>{
-        res.render("district/krishnabeds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            KrishnaBedsData: districtBedsData.Krishna,
-        });
-    })
-    app.get("/kurnoolbeds", ensureAuth, (req, res) =>{
-        res.render("district/kurnoolbeds",{
-            siteName: siteTitle,
-            KurnoolBedsData: districtBedsData.Kurnool,
-        });
-    })
-    app.get("/prakasambeds", ensureAuth, (req, res) =>{
-        res.render("district/prakasambeds",{
-            siteName: siteTitle,
-            PrakasamBedsData: districtBedsData.Prakasam,
-        });
-    })
-    app.get("/nellorebeds", ensureAuth, (req, res) =>{
-        res.render("district/nellorebeds",{
-            siteName: siteTitle,
-            NelloreBedsData: districtBedsData['Spsr nellore'],
-        });
-    })
-    app.get("/srikakulambeds", ensureAuth, (req, res) =>{
-        res.render("district/srikakulambeds",{
-            siteName: siteTitle,
-            SrikakulamBedsData: districtBedsData.Srikakulam,
-        });
-    })
-    app.get("/vizagbeds", ensureAuth, (req, res) =>{
-        res.render("district/vizagbeds",{
-            siteName: siteTitle,
-            VisakhapatanamBedsData: districtBedsData.Visakhapatanam,
-        });
-    }) 
-    app.get("/vizianagarambeds", ensureAuth, (req, res) =>{
-        res.render("district/vizianagarambeds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            VizianagaramBedsData: districtBedsData.Vizianagaram,
-        });
-    })
-    app.get("/westgodavaribeds", ensureAuth, (req, res) =>{
-        res.render("district/westgodavaribeds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            WestgodavariBedsData: districtBedsData['West godavari'],
-        });
-    })
-    app.get("/kadapabeds", ensureAuth, (req, res) =>{
-        res.render("district/kadapabeds",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-            KadapaBedsData: districtBedsData['Y.s.r.'],
-        });
-    })
-    app.get("/graphs", ensureAuth, (req, res) =>{
-        res.render("graphs",{
-            siteDate: siteDate,
-            siteName: siteTitle,
-        });
-    })
-var districtBedsData ={}
-function separateBeds(data){
-    districtNames=['Anantapur','Chittoor','East godavari', 'Guntur', 'Krishna','Kurnool', 'Prakasam', 'Spsr nellore', 'Srikakulam','Visakhapatanam','Vizianagaram','West godavari', 'Y.s.r.']
-    for (const dist of districtNames){
-        // console.log(dist)
-       var temp=[]
-       for (const host of data){
-        //    console.log(host);
-           if (host.district==dist){
-            temp.push(host)
-           }
-       }
-       districtBedsData[dist]=temp
-    }
-    //    console.log(districtBedsData.Chittoor);
-}
+  });
 
+app.get("/beds", ensureAuth, (req, res) => {
+  res.render("beds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    AnantapurBedsData: districtBedsData.Anantapur,
+    ChittoorBedsData: districtBedsData.Chittoor,
+    EastgodavariBedsData: districtBedsData["East godavari"],
+    GunturBedsData: districtBedsData.Guntur,
+    KrishnaBedsData: districtBedsData.Krishna,
+    KurnoolBedsData: districtBedsData.Kurnool,
+    PrakasamBedsData: districtBedsData.Prakasam,
+    NelloreBedsData: districtBedsData["Spsr nellore"],
+    SrikakulamBedsData: districtBedsData.Srikakulam,
+    VisakhapatanamBedsData: districtBedsData.Visakhapatanam,
+    VizianagaramBedsData: districtBedsData.Vizianagaram,
+    WestgodavariBedsData: districtBedsData["West godavari"],
+    KadapaBedsData: districtBedsData["Y.s.r."],
+  });
+});
+app.get("/anantapurbeds", ensureAuth, (req, res) => {
+  res.render("district/anantapurbeds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    AnantapurBedsData: districtBedsData.Anantapur,
+  });
+});
+app.get("/chittoorbeds", ensureAuth, (req, res) => {
+  res.render("district/chittoorbeds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    ChittoorBedsData: districtBedsData.Chittoor,
+  });
+});
+app.get("/eastgodavaribeds", ensureAuth, (req, res) => {
+  res.render("district/eastgodavaribeds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    EastgodavariBedsData: districtBedsData["East godavari"],
+  });
+});
+app.get("/gunturbeds", ensureAuth, (req, res) => {
+  res.render("district/gunturbeds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    GunturBedsData: districtBedsData.Guntur,
+  });
+});
+app.get("/krishnabeds", ensureAuth, (req, res) => {
+  res.render("district/krishnabeds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    KrishnaBedsData: districtBedsData.Krishna,
+  });
+});
+app.get("/kurnoolbeds", ensureAuth, (req, res) => {
+  res.render("district/kurnoolbeds", {
+    siteName: siteTitle,
+    KurnoolBedsData: districtBedsData.Kurnool,
+  });
+});
+app.get("/prakasambeds", ensureAuth, (req, res) => {
+  res.render("district/prakasambeds", {
+    siteName: siteTitle,
+    PrakasamBedsData: districtBedsData.Prakasam,
+  });
+});
+app.get("/nellorebeds", ensureAuth, (req, res) => {
+  res.render("district/nellorebeds", {
+    siteName: siteTitle,
+    NelloreBedsData: districtBedsData["Spsr nellore"],
+  });
+});
+app.get("/srikakulambeds", ensureAuth, (req, res) => {
+  res.render("district/srikakulambeds", {
+    siteName: siteTitle,
+    SrikakulamBedsData: districtBedsData.Srikakulam,
+  });
+});
+app.get("/vizagbeds", ensureAuth, (req, res) => {
+  res.render("district/vizagbeds", {
+    siteName: siteTitle,
+    VisakhapatanamBedsData: districtBedsData.Visakhapatanam,
+  });
+});
+app.get("/vizianagarambeds", ensureAuth, (req, res) => {
+  res.render("district/vizianagarambeds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    VizianagaramBedsData: districtBedsData.Vizianagaram,
+  });
+});
+app.get("/westgodavaribeds", ensureAuth, (req, res) => {
+  res.render("district/westgodavaribeds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    WestgodavariBedsData: districtBedsData["West godavari"],
+  });
+});
+app.get("/kadapabeds", ensureAuth, (req, res) => {
+  res.render("district/kadapabeds", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    KadapaBedsData: districtBedsData["Y.s.r."],
+  });
+});
+app.get("/graphs", ensureAuth, (req, res) => {
+  res.render("graphs", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
+var districtBedsData = {};
+function separateBeds(data) {
+  districtNames = [
+    "Anantapur",
+    "Chittoor",
+    "East godavari",
+    "Guntur",
+    "Krishna",
+    "Kurnool",
+    "Prakasam",
+    "Spsr nellore",
+    "Srikakulam",
+    "Visakhapatanam",
+    "Vizianagaram",
+    "West godavari",
+    "Y.s.r.",
+  ];
+  for (const dist of districtNames) {
+    // console.log(dist)
+    var temp = [];
+    for (const host of data) {
+      //    console.log(host);
+      if (host.district == dist) {
+        temp.push(host);
+      }
+    }
+    districtBedsData[dist] = temp;
+  }
+  //    console.log(districtBedsData.Chittoor);
+}
 
 // https://covidtelangana.com/data/covidtelangana.com/plasma_data.json
-axios.get('https://covidaps.com/data/covidaps.com/plasma_data.json')
-.then(function (response) {
-    plasma(response.data)
-//   console.log(response.data[1].name)
-//   separateBeds(response.data)
-})
-.catch(function (error) {
-  console.log(error);
-})
+axios
+  .get("https://covidaps.com/data/covidaps.com/plasma_data.json")
+  .then(function (response) {
+    plasma(response.data);
+    //   console.log(response.data[1].name)
+    //   separateBeds(response.data)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 
 var plasmaData;
-function plasma(data){
-    
-    // console.log(data);
-    i=0;
-    for(const plasma of data){
-      var serverTime = plasma.last_updated_on;
-      var status = plasma.status;
-      if(status == 'not_available'){
-          status = "Not Available"
-      }
-      else{
-          status = "Available"
-      }
-    data[i].status = status;
-   
-     var changedLocalTime= moment(serverTime).startOf().fromNow();
-     if(changedLocalTime == "51 years ago"){
-         changedLocalTime = "Unknown"
-     }
-     data[i].last_updated_on=changedLocalTime;
-     i++;
-    // console.log(changedLocalTime)
-
+function plasma(data) {
+  // console.log(data);
+  i = 0;
+  for (const plasma of data) {
+    var serverTime = plasma.last_updated_on;
+    var status = plasma.status;
+    if (status == "not_available") {
+      status = "Not Available";
+    } else {
+      status = "Available";
     }
-    plasmaData=data.sort(dynamicsort("status","asc"))
-    // console.log(plasmaData);
+    data[i].status = status;
+
+    var changedLocalTime = moment(serverTime).startOf().fromNow();
+    if (changedLocalTime == "51 years ago") {
+      changedLocalTime = "Unknown";
+    }
+    data[i].last_updated_on = changedLocalTime;
+    i++;
+    // console.log(changedLocalTime)
+  }
+  plasmaData = data.sort(dynamicsort("status", "asc"));
+  // console.log(plasmaData);
 }
 
-
-axios.get('https://covidresourcesapi.ak3002.repl.co/')
-.then(function (response) {
-//   console.log(response.data)
-    const twt=  Object.keys(response.data)
-    const pt=[]
-    for (const i of twt){
-    pt.push(response.data[i]);
-    pt.reverse()
-    // console.log(pt)
+axios
+  .get("https://covidresourcesapi.ak3002.repl.co/")
+  .then(function (response) {
+    //   console.log(response.data)
+    const twt = Object.keys(response.data);
+    const pt = [];
+    for (const i of twt) {
+      pt.push(response.data[i]);
+      pt.reverse();
+      // console.log(pt)
     }
-    tweet(pt)
+    tweet(pt);
     // console.log(pt.resourceInfo);
-
-})
-.catch(function (error) {
-  console.log(error);
-})
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 var tweetData;
-function tweet(pt){
+function tweet(pt) {
   tweetData = pt;
 }
 // console.log(tweetData)
@@ -462,9 +489,9 @@ function tweet(pt){
 // function tweet(pt){
 //   for(const tt of pt)
 //   {   if (tt.includes("reverified")){
-//     for( var i = 0; i < tt.length; i++){ 
-//         tt.splice(i, 1); 
-    
+//     for( var i = 0; i < tt.length; i++){
+//         tt.splice(i, 1);
+
 //     }
 //     //   console.log(tt)
 
@@ -473,8 +500,6 @@ function tweet(pt){
 //   }
 // }
 // }
-
-
 
 //   else if(tt.includes("phone")){
 //     const searchName = tt.slice(tt.search('name') +6,tt.search("number:"))
@@ -498,7 +523,6 @@ function tweet(pt){
 //   }
 //   }
 // }
-
 
 // axios.get('https://covidresourcesapi.ak3002.repl.co/')
 // .then(function (response) {
@@ -545,380 +569,361 @@ function tweet(pt){
 //   }
 // }
 
+app.get("/plasma", ensureAuth, (req, res) => {
+  res.render("plasma", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    PlasmaData: plasmaData,
+    // AnantapurBedsData: districtBedsData['Spsr nellore'],
+  });
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  app.get("/plasma", ensureAuth, (req, res) =>{
-      res.render("plasma",{
-          siteDate: siteDate,
-          siteName: siteTitle,
-          PlasmaData: plasmaData
-          // AnantapurBedsData: districtBedsData['Spsr nellore'],
-          
-      });
-  })
-
-
-  axios.get('https://needap-emergencycontacts.herokuapp.com/api/contacts')
+axios
+  .get("https://needap-emergencycontacts.herokuapp.com/api/contacts")
   .then(function (response) {
-      emergencyContacts(response.data.data)
-   
+    emergencyContacts(response.data.data);
   })
   .catch(function (error) {
     console.log(error);
-  })
+  });
 var Contacts;
-function emergencyContacts(data){
-    i=0;
-    for(const emergencyContacts of data){
-        data[i];
-        i++;
-    }
-    Contacts = data;
-    // console.log(Contacts)
-
+function emergencyContacts(data) {
+  i = 0;
+  for (const emergencyContacts of data) {
+    data[i];
+    i++;
+  }
+  Contacts = data;
+  // console.log(Contacts)
 }
-app.get("/contacts", ensureAuth, (req, res) =>{
-    res.render("emergencycontacts",{
-        siteDate: siteDate,
-        siteName: siteTitle,
-        Contacts: Contacts
-        
-    });
-})
-app.get("/donate", ensureAuth, (req, res) =>{
-    res.render("donate",{
-        siteDate: siteDate,
-        siteName: siteTitle 
-    
-    });
-})
+app.get("/contacts", ensureAuth, (req, res) => {
+  res.render("emergencycontacts", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    Contacts: Contacts,
+  });
+});
+app.get("/donate", ensureAuth, (req, res) => {
+  res.render("donate", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
 
-app.get("/donateblood", ensureAuth, (req, res) =>{
-    res.render("donateblood",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-       
-    });
-})
-app.get("/donateplasma", ensureAuth, (req, res) =>{
-    res.render("donateplasma",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-       
-    });
-})
-app.get("/requestedlist", ensureAuth, (req, res) =>{
-    res.render("requestedlist",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-       
-    });
-})
+app.get("/donateblood", ensureAuth, (req, res) => {
+  res.render("donateblood", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/donateplasma", ensureAuth, (req, res) => {
+  res.render("donateplasma", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/requestedlist", ensureAuth, (req, res) => {
+  res.render("requestedlist", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
 
+app.get("/report-info", ensureAuth, (req, res) => {
+  res.render("report-info", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
+app.get("/remove-info", ensureAuth, (req, res) => {
+  res.render("remove-info", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
 
-app.get("/report-info", ensureAuth, (req, res) =>{
-    res.render("report-info",{
-        siteDate: siteDate,
-        siteName: siteTitle,
-    });
-})
-app.get("/remove-info", ensureAuth, (req, res) =>{
-    res.render("remove-info",{
-        siteDate: siteDate,
-        siteName: siteTitle,
-    });
-})
-
-function casesFunc(ap){    
-    l=['Anantapur','Chittoor','East Godavari', 'Guntur', 'Krishna','Kurnool', 'Prakasam', 'S.P.S. Nellore', 'Srikakulam','Visakhapatnam','Vizianagaram','West Godavari', 'Y.S.R. Kadapa']
-    for (const i in l){
+function casesFunc(ap) {
+  l = [
+    "Anantapur",
+    "Chittoor",
+    "East Godavari",
+    "Guntur",
+    "Krishna",
+    "Kurnool",
+    "Prakasam",
+    "S.P.S. Nellore",
+    "Srikakulam",
+    "Visakhapatnam",
+    "Vizianagaram",
+    "West Godavari",
+    "Y.S.R. Kadapa",
+  ];
+  for (const i in l) {
     //  dist[l[i]]=response.data["Andhra Pradesh"].districtData[l[i]];
-     dist[l[i]]=ap[l[i]];
-    }
+    dist[l[i]] = ap[l[i]];
+  }
 }
 
+app.get("/search", ensureAuth, (req, res) => {
+  res.render("search", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    AnantapurConfirmedCases: dist["Anantapur"].confirmed.toLocaleString(),
+    AnantapurRecoveredCases: dist["Anantapur"].recovered.toLocaleString(),
+    AnantapurDeceasedCases: dist["Anantapur"].deceased.toLocaleString(),
+    AnantapurActiveCases: dist["Anantapur"].active.toLocaleString(),
+    AnantapurTitle1: "Anantapur",
+    AnantapurTitle2: "anantapur",
+    ChittoorConfirmedCases: dist["Chittoor"].confirmed.toLocaleString(),
+    ChittoorRecoveredCases: dist["Chittoor"].recovered.toLocaleString(),
+    ChittoorDeceasedCases: dist["Chittoor"].deceased.toLocaleString(),
+    ChittoorActiveCases: dist["Chittoor"].active.toLocaleString(),
+    ChittoorTitle1: "Chittoor",
+    ChittoorTitle2: "chittoor",
+    EastGodavariConfirmedCases:
+      dist["East Godavari"].confirmed.toLocaleString(),
+    EastGodavariRecoveredCases:
+      dist["East Godavari"].recovered.toLocaleString(),
+    EastGodavariDeceasedCases: dist["East Godavari"].deceased.toLocaleString(),
+    EastGodavariActiveCases: dist["East Godavari"].active.toLocaleString(),
+    EastGodavariTitle1: "East Godavari",
+    EastGodavariTitle2: "east godavari",
+    GunturConfirmedCases: dist["Guntur"].confirmed.toLocaleString(),
+    GunturRecoveredCases: dist["Guntur"].recovered.toLocaleString(),
+    GunturDeceasedCases: dist["Guntur"].deceased.toLocaleString(),
+    GunturActiveCases: dist["Guntur"].active.toLocaleString(),
+    GunturTitle1: "Guntur",
+    GunturTitle2: "guntur",
+    KrishnaConfirmedCases: dist["Krishna"].confirmed.toLocaleString(),
+    KrishnaRecoveredCases: dist["Krishna"].recovered.toLocaleString(),
+    KrishnaDeceasedCases: dist["Krishna"].deceased.toLocaleString(),
+    KrishnaActiveCases: dist["Krishna"].active.toLocaleString(),
+    KrishnaTitle1: "Krishna",
+    KrishnaTitle2: "krishna",
+    KurnoolConfirmedCases: dist["Kurnool"].confirmed.toLocaleString(),
+    KurnoolRecoveredCases: dist["Kurnool"].recovered.toLocaleString(),
+    KurnoolDeceasedCases: dist["Kurnool"].deceased.toLocaleString(),
+    KurnoolActiveCases: dist["Kurnool"].active.toLocaleString(),
+    KurnoolTitle1: "Kurnool",
+    KurnoolTitle2: "kurnool",
+    PrakasamConfirmedCases: dist["Prakasam"].confirmed.toLocaleString(),
+    PrakasamRecoveredCases: dist["Prakasam"].recovered.toLocaleString(),
+    PrakasamDeceasedCases: dist["Prakasam"].deceased.toLocaleString(),
+    PrakasamActiveCases: dist["Prakasam"].active.toLocaleString(),
+    PrakasamTitle1: "Prakasam",
+    PrakasamTitle2: "prakasam",
+    NelloreConfirmedCases: dist["S.P.S. Nellore"].confirmed.toLocaleString(),
+    NelloreRecoveredCases: dist["S.P.S. Nellore"].recovered.toLocaleString(),
+    NelloreDeceasedCases: dist["S.P.S. Nellore"].deceased.toLocaleString(),
+    NelloreActiveCases: dist["S.P.S. Nellore"].active.toLocaleString(),
+    NelloreTitle1: "Nellore",
+    NelloreTitle2: "nellore",
+    SrikakulamConfirmedCases: dist["Srikakulam"].confirmed.toLocaleString(),
+    SrikakulamRecoveredCases: dist["Srikakulam"].recovered.toLocaleString(),
+    SrikakulamDeceasedCases: dist["Srikakulam"].deceased.toLocaleString(),
+    SrikakulamActiveCases: dist["Srikakulam"].active.toLocaleString(),
+    SrikakulamTitle1: "Srikakulam",
+    SrikakulamTitle2: "srikakulam",
+    VisakhapatnamConfirmedCases:
+      dist["Visakhapatnam"].confirmed.toLocaleString(),
+    VisakhapatnamRecoveredCases:
+      dist["Visakhapatnam"].recovered.toLocaleString(),
+    VisakhapatnamDeceasedCases: dist["Visakhapatnam"].deceased.toLocaleString(),
+    VisakhapatnamActiveCases: dist["Visakhapatnam"].active.toLocaleString(),
+    VisakhapatnamTitle1: "Visakhapatnam",
+    VisakhapatnamTitle2: "visakhapatnam",
+    VizianagaramConfirmedCases: dist["Vizianagaram"].confirmed.toLocaleString(),
+    VizianagaramRecoveredCases: dist["Vizianagaram"].recovered.toLocaleString(),
+    VizianagaramDeceasedCases: dist["Vizianagaram"].deceased.toLocaleString(),
+    VizianagaramActiveCases: dist["Vizianagaram"].active.toLocaleString(),
+    VizianagaramTitle1: "Vizianagaram",
+    VizianagaramTitle2: "vizianagaram",
+    WestGodavariConfirmedCases:
+      dist["West Godavari"].confirmed.toLocaleString(),
+    WestGodavariRecoveredCases:
+      dist["West Godavari"].recovered.toLocaleString(),
+    WestGodavariDeceasedCases: dist["West Godavari"].deceased.toLocaleString(),
+    WestGodavariActiveCases: dist["West Godavari"].active.toLocaleString(),
+    WestGodavariTitle1: "West Godavari",
+    WestGodavariTitle2: "west godavari",
+    KadapaConfirmedCases: dist["Y.S.R. Kadapa"].confirmed.toLocaleString(),
+    KadapaRecoveredCases: dist["Y.S.R. Kadapa"].recovered.toLocaleString(),
+    KadapaDeceasedCases: dist["Y.S.R. Kadapa"].deceased.toLocaleString(),
+    KadapaActiveCases: dist["Y.S.R. Kadapa"].active.toLocaleString(),
+    KadapaTitle1: "Kadapa",
+    KadapaTitle2: "kadapa",
+  });
+});
 
-app.get("/search", ensureAuth, (req, res) =>{
-    res.render("search",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        AnantapurConfirmedCases: dist['Anantapur'].confirmed.toLocaleString(),
-        AnantapurRecoveredCases: dist['Anantapur'].recovered.toLocaleString(),
-        AnantapurDeceasedCases: dist['Anantapur'].deceased.toLocaleString(),
-        AnantapurActiveCases: dist['Anantapur'].active.toLocaleString(),
-        AnantapurTitle1: "Anantapur",
-        AnantapurTitle2: "anantapur",
-        ChittoorConfirmedCases: dist['Chittoor'].confirmed.toLocaleString(),
-        ChittoorRecoveredCases: dist['Chittoor'].recovered.toLocaleString(),
-        ChittoorDeceasedCases: dist['Chittoor'].deceased.toLocaleString(),
-        ChittoorActiveCases: dist['Chittoor'].active.toLocaleString(),
-        ChittoorTitle1: "Chittoor",
-        ChittoorTitle2: "chittoor",
-        EastGodavariConfirmedCases: dist['East Godavari'].confirmed.toLocaleString(),
-        EastGodavariRecoveredCases: dist['East Godavari'].recovered.toLocaleString(),
-        EastGodavariDeceasedCases: dist['East Godavari'].deceased.toLocaleString(),
-        EastGodavariActiveCases: dist['East Godavari'].active.toLocaleString(),
-        EastGodavariTitle1: "East Godavari",
-        EastGodavariTitle2: "east godavari",
-        GunturConfirmedCases: dist['Guntur'].confirmed.toLocaleString(),
-        GunturRecoveredCases: dist['Guntur'].recovered.toLocaleString(),
-        GunturDeceasedCases: dist['Guntur'].deceased.toLocaleString(),
-        GunturActiveCases: dist['Guntur'].active.toLocaleString(),
-        GunturTitle1: "Guntur",
-        GunturTitle2: "guntur",
-        KrishnaConfirmedCases: dist['Krishna'].confirmed.toLocaleString(),
-        KrishnaRecoveredCases: dist['Krishna'].recovered.toLocaleString(),
-        KrishnaDeceasedCases: dist['Krishna'].deceased.toLocaleString(),
-        KrishnaActiveCases: dist['Krishna'].active.toLocaleString(),
-        KrishnaTitle1: "Krishna",
-        KrishnaTitle2: "krishna",
-        KurnoolConfirmedCases: dist['Kurnool'].confirmed.toLocaleString(),
-        KurnoolRecoveredCases: dist['Kurnool'].recovered.toLocaleString(),
-        KurnoolDeceasedCases: dist['Kurnool'].deceased.toLocaleString(),
-        KurnoolActiveCases: dist['Kurnool'].active.toLocaleString(),
-        KurnoolTitle1: "Kurnool",
-        KurnoolTitle2: "kurnool",
-        PrakasamConfirmedCases: dist['Prakasam'].confirmed.toLocaleString(),
-        PrakasamRecoveredCases: dist['Prakasam'].recovered.toLocaleString(),
-        PrakasamDeceasedCases: dist['Prakasam'].deceased.toLocaleString(),
-        PrakasamActiveCases: dist['Prakasam'].active.toLocaleString(),
-        PrakasamTitle1: "Prakasam",
-        PrakasamTitle2: "prakasam",
-        NelloreConfirmedCases: dist['S.P.S. Nellore'].confirmed.toLocaleString(),
-        NelloreRecoveredCases: dist['S.P.S. Nellore'].recovered.toLocaleString(),
-        NelloreDeceasedCases: dist['S.P.S. Nellore'].deceased.toLocaleString(),
-        NelloreActiveCases: dist['S.P.S. Nellore'].active.toLocaleString(),
-        NelloreTitle1: "Nellore",
-        NelloreTitle2: "nellore",
-        SrikakulamConfirmedCases: dist['Srikakulam'].confirmed.toLocaleString(),
-        SrikakulamRecoveredCases: dist['Srikakulam'].recovered.toLocaleString(),
-        SrikakulamDeceasedCases: dist['Srikakulam'].deceased.toLocaleString(),
-        SrikakulamActiveCases: dist['Srikakulam'].active.toLocaleString(),
-        SrikakulamTitle1: "Srikakulam",
-        SrikakulamTitle2: "srikakulam",
-        VisakhapatnamConfirmedCases: dist['Visakhapatnam'].confirmed.toLocaleString(),
-        VisakhapatnamRecoveredCases: dist['Visakhapatnam'].recovered.toLocaleString(),
-        VisakhapatnamDeceasedCases: dist['Visakhapatnam'].deceased.toLocaleString(),
-        VisakhapatnamActiveCases: dist['Visakhapatnam'].active.toLocaleString(),
-        VisakhapatnamTitle1: "Visakhapatnam",
-        VisakhapatnamTitle2: "visakhapatnam",
-        VizianagaramConfirmedCases: dist['Vizianagaram'].confirmed.toLocaleString(),
-        VizianagaramRecoveredCases: dist['Vizianagaram'].recovered.toLocaleString(),
-        VizianagaramDeceasedCases: dist['Vizianagaram'].deceased.toLocaleString(),
-        VizianagaramActiveCases: dist['Vizianagaram'].active.toLocaleString(),
-        VizianagaramTitle1: "Vizianagaram",
-        VizianagaramTitle2: "vizianagaram",
-        WestGodavariConfirmedCases: dist['West Godavari'].confirmed.toLocaleString(),
-        WestGodavariRecoveredCases: dist['West Godavari'].recovered.toLocaleString(),
-        WestGodavariDeceasedCases: dist['West Godavari'].deceased.toLocaleString(),
-        WestGodavariActiveCases: dist['West Godavari'].active.toLocaleString(),
-        WestGodavariTitle1: "West Godavari",
-        WestGodavariTitle2: "west godavari",
-        KadapaConfirmedCases: dist['Y.S.R. Kadapa'].confirmed.toLocaleString(),
-        KadapaRecoveredCases: dist['Y.S.R. Kadapa'].recovered.toLocaleString(),
-        KadapaDeceasedCases: dist['Y.S.R. Kadapa'].deceased.toLocaleString(),
-        KadapaActiveCases: dist['Y.S.R. Kadapa'].active.toLocaleString(),
-        KadapaTitle1: "Kadapa",
-        KadapaTitle2: "kadapa"
-    });
-})
-
-
-app.get('/about', ensureAuth, (req, res) =>{
-    res.render("about",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        name:req.user.displayName,
-        img:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    })
-})
-app.get('/terms-and-conditions', (req, res) =>{
-    res.render("terms",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        
-    })
-})
-app.get('/menu-qr', (req, res) =>{
-    res.render("menu-qr",{
-        siteDate: siteDate,
-        siteName: siteTitle,
-        
-    })
-})
+app.get("/about", ensureAuth, (req, res) => {
+  res.render("about", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    name: req.user.displayName,
+    img: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/terms-and-conditions", (req, res) => {
+  res.render("terms", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
+app.get("/menu-qr", (req, res) => {
+  res.render("menu-qr", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
 // app.get('/feed', (req, res) =>{
 //     res.render("feed",{
 //         siteDate: siteDate,
 //         siteName: siteTitle,
-        
+
 //     })
 // })
 
+app.get("/developer", ensureAuth, (req, res) => {
+  res.render("developer", {
+    img: req.user.photos[0].value,
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
 
-app.get("/developer", ensureAuth,(req, res) =>{
-    res.render("developer",{
-        img:req.user.photos[0].value,
-            siteDate: siteDate,
-        siteName: siteTitle,
+app.get("/donorslist", ensureAuth, (req, res) => {
+  res.render("donorslist", {
+    img: req.user.photos[0].value,
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
+app.get("/request", ensureAuth, (req, res) => {
+  res.render("request", {
+    img: req.user.photos[0].value,
+    siteDate: siteDate,
+    siteName: siteTitle,
+    email: req.user.emails[0].value,
+    date: currentDate,
+  });
+});
 
-    });
-})
-
-app.get("/donorslist", ensureAuth,(req, res) =>{
-    res.render("donorslist",{
-        img:req.user.photos[0].value,
-            siteDate: siteDate,
-        siteName: siteTitle,
-
-    });
-})
-app.get("/request", ensureAuth,(req, res) =>{
-    res.render("request",{
-        img:req.user.photos[0].value,
-            siteDate: siteDate,
-        siteName: siteTitle,
-        email:req.user.emails[0].value,
-        date: currentDate
-
-
-    });
-})
-
-
-app.get("/menu-main", ensureAuth, (req, res) =>{
-    res.render("menu-main",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get("/menu-share", ensureAuth, (req, res) =>{
-    res.render("menu-share",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get("/menu-feedback", ensureAuth, (req, res) =>{
-    res.render("menu-feedback",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get("/menu-footer", ensureAuth, (req, res) =>{
-    res.render("menu-footer",{
-            siteDate: siteDate,
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get("/chat", ensureAuth, (req, res) =>{
-    res.render("chat",{
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get("/twitter-data", ensureAuth, (req, res) =>{
-    res.render("twitter-data",{
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value,
-        siteDate: siteDate,
-        tweetData: tweetData
-
-    });
-})
-app.get("/article-1", ensureAuth, (req, res) =>{
-    res.render("articles/article-1",{
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get("/article-2", ensureAuth, (req, res) =>{
-    res.render("articles/article-2",{
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get("/article-3", ensureAuth, (req, res) =>{
-    res.render("articles/article-3",{
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get("/article-4", ensureAuth, (req, res) =>{
-    res.render("articles/article-4",{
-        siteName: siteTitle,
-        name:req.user.displayName,
-        pic:req.user.photos[0].value,
-        email:req.user.emails[0].value
-    });
-})
-app.get('/logout', (req, res) => {
-    req.session = null;
-    req.logout();
-    res.redirect('/');
-})
-app.get("/test", ensureAuth,(req, res) =>{
-    res.render("test",{
-        siteName: siteTitle,
-        json: {
-            items: "bobby",
-            items1: "bob",
-            items2: "Bo",
-        }
-
-    });
-})
-app.get("/vaccine", ensureAuth,(req, res) =>{
-    res.render("vaccine",{
-        siteName: siteTitle,
-
-    });
-})
+app.get("/menu-main", ensureAuth, (req, res) => {
+  res.render("menu-main", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/menu-share", ensureAuth, (req, res) => {
+  res.render("menu-share", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/menu-feedback", ensureAuth, (req, res) => {
+  res.render("menu-feedback", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/menu-footer", ensureAuth, (req, res) => {
+  res.render("menu-footer", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/chat", ensureAuth, (req, res) => {
+  res.render("chat", {
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/twitter-data", ensureAuth, (req, res) => {
+  res.render("twitter-data", {
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+    siteDate: siteDate,
+    tweetData: tweetData,
+  });
+});
+app.get("/article-1", ensureAuth, (req, res) => {
+  res.render("articles/article-1", {
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/article-2", ensureAuth, (req, res) => {
+  res.render("articles/article-2", {
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/article-3", ensureAuth, (req, res) => {
+  res.render("articles/article-3", {
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/article-4", ensureAuth, (req, res) => {
+  res.render("articles/article-4", {
+    siteName: siteTitle,
+    name: req.user.displayName,
+    pic: req.user.photos[0].value,
+    email: req.user.emails[0].value,
+  });
+});
+app.get("/logout", (req, res) => {
+  req.session = null;
+  req.logout();
+  res.redirect("/");
+});
+app.get("/test", ensureAuth, (req, res) => {
+  res.render("test", {
+    siteName: siteTitle,
+    json: {
+      items: "bobby",
+      items1: "bob",
+      items2: "Bo",
+    },
+  });
+});
+app.get("/vaccine", ensureAuth, (req, res) => {
+  res.render("vaccine", {
+    siteName: siteTitle,
+  });
+});
 
 // app.get("/features/*", isLoggedIn, (req, res) =>{
 //     res.render("404",{
@@ -937,8 +942,7 @@ app.get("/vaccine", ensureAuth,(req, res) =>{
 // console.log(__dirname)
 // console.log(path.join(__dirname, "../public"))
 
-
-// Get Request 
+// Get Request
 // app.get("/", (req,res) => {
 //     res.send("Hello World");
 // })
@@ -950,292 +954,279 @@ app.get("/vaccine", ensureAuth,(req, res) =>{
 //     res.send("Hello World");
 // })
 
-app.listen(port, ()=>{
-    console.log(`Listening on port ${port}`);
-})
-
-
-
-
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
 
 // firebase config
 
 var serviceAccount = require("./test-bobby-needap.json");
-const { hour } = require('javascript-time-ago/gradation');
+const { hour } = require("javascript-time-ago/gradation");
 admin.initializeApp({
-credential: admin.credential.cert(serviceAccount),
-databaseURL: "https://test-bobby-needap-default-rtdb.firebaseio.com/"
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://test-bobby-needap-default-rtdb.firebaseio.com/",
 });
 // admin.firestore().settings({ignoreUndefinedProperties:true});
 
-var fireBaseData=[];
+var fireBaseData = [];
 
-async function getFirestore(){
-    fireBaseData=[];
-    const firestore_con  = await admin.firestore();
+async function getFirestore() {
+  fireBaseData = [];
+  const firestore_con = await admin.firestore();
 
-const documentReferences =  await firestore_con.collection('blooddonordata').listDocuments()
-const documentIds = documentReferences.map(it => it.id)
-i=0;
-for (const i of documentIds){
-    const writeResult = firestore_con.collection('blooddonordata').doc(i).get().then(doc => {
-    if (!doc.exists) { console.log('No such document!'); }
-    else {
-        // console.log(doc.data());
-        fireBaseData.push(doc.data())
-    // console.log(fireBaseData)
+  const documentReferences = await firestore_con
+    .collection("blooddonordata")
+    .listDocuments();
+  const documentIds = documentReferences.map((it) => it.id);
+  i = 0;
+  for (const i of documentIds) {
+    const writeResult = firestore_con
+      .collection("blooddonordata")
+      .doc(i)
+      .get()
+      .then((doc) => {
+        if (!doc.exists) {
+          console.log("No such document!");
+        } else {
+          // console.log(doc.data());
+          fireBaseData.push(doc.data());
+          // console.log(fireBaseData)
 
-        // return doc.data();
-    }
-    // console.log(fireBaseData)
+          // return doc.data();
+        }
+        // console.log(fireBaseData)
+      })
 
-})
-
-    .catch(err => {
-         console.log('Error getting document', err);
-        });
-  
-    }
-
+      .catch((err) => {
+        console.log("Error getting document", err);
+      });
+  }
 }
 // sendData=fireBaseData.sort(dynamicsort("name","asc"))
-    
-app.get('/blooddonorslist',ensureAuth, async (request,response) =>{
-    var db_result = await getFirestore();
-    // console.log(fireBaseData)
-    function timedOut(){
-        const sortByDate = fireBaseData => {
-            const sorter = (a, b) => {
-               return new Date(b.sortedDate).getTime() - new Date(a.sortedDate).getTime();
-            }
-            fireBaseData.sort(sorter);
-         };
-         sortByDate(fireBaseData);
-    response.render('blooddonorslist',{
-        db_result: fireBaseData,
-            siteDate: siteDate,
-            siteName: siteTitle
+
+app.get("/blooddonorslist", ensureAuth, async (request, response) => {
+  var db_result = await getFirestore();
+  // console.log(fireBaseData)
+  function timedOut() {
+    const sortByDate = (fireBaseData) => {
+      const sorter = (a, b) => {
+        return (
+          new Date(b.sortedDate).getTime() - new Date(a.sortedDate).getTime()
+        );
+      };
+      fireBaseData.sort(sorter);
+    };
+    sortByDate(fireBaseData);
+    response.render("blooddonorslist", {
+      db_result: fireBaseData,
+      siteDate: siteDate,
+      siteName: siteTitle,
     });
-}
-setTimeout(timedOut, 1000);
+  }
+  setTimeout(timedOut, 1000);
+});
 
-    });
+var plasmaDonorsData = [];
 
+async function getPlasmaDonorsData() {
+  plasmaDonorsData = [];
+  const firestore_con = await admin.firestore();
 
-    var plasmaDonorsData=[];
-
-    async function getPlasmaDonorsData(){
-        plasmaDonorsData=[];
-        const firestore_con  = await admin.firestore();
-    
-    const documentReferences =  await firestore_con.collection('plasmadonordata').listDocuments()
-    const documentIds = documentReferences.map(it => it.id)
-    i=0;
-    for (const i of documentIds){
-        const writeResult = firestore_con.collection('plasmadonordata').doc(i).get().then(doc => {
-        if (!doc.exists) { console.log('No such document!'); }
-        else {
-            // console.log(doc.data());
-            plasmaDonorsData.push(doc.data())
-    
+  const documentReferences = await firestore_con
+    .collection("plasmadonordata")
+    .listDocuments();
+  const documentIds = documentReferences.map((it) => it.id);
+  i = 0;
+  for (const i of documentIds) {
+    const writeResult = firestore_con
+      .collection("plasmadonordata")
+      .doc(i)
+      .get()
+      .then((doc) => {
+        if (!doc.exists) {
+          console.log("No such document!");
+        } else {
+          // console.log(doc.data());
+          plasmaDonorsData.push(doc.data());
         }
-    
-    })
-    
-        .catch(err => {
-             console.log('Error getting document', err);
-            });
-      
-        }
-    
-    }   
+      })
 
-app.get('/plasmadonorslist',ensureAuth, async (request,response) =>{
-    var db_result = await getPlasmaDonorsData();
-    // console.log(fireBaseData)
-    function timedOut(){
-        const sortByDate = plasmaDonorsData => {
-            const sorter = (a, b) => {
-               return new Date(b.sortedDate).getTime() - new Date(a.sortedDate).getTime();
-            }
-            plasmaDonorsData.sort(sorter);
-         };
-         sortByDate(plasmaDonorsData);
-    response.render('plasmadonorslist',{
-        plasmaDonorsData: plasmaDonorsData,
-            siteDate: siteDate,
-            siteName: siteTitle
-    });
-}
-setTimeout(timedOut, 1000);
-
-    });
-
-
-
-
-
-
-    var requestData=[];
-
-    async function getRequestsData(){
-        requestData=[];
-        const firestore_con  = await admin.firestore();
-    
-    const documentReferences =  await firestore_con.collection('requestdata').listDocuments()
-    const documentIds = documentReferences.map(it => it.id)
-    i=0;
-    for (const i of documentIds){
-        const writeResult = firestore_con.collection('requestdata').doc(i).get().then(doc => {
-        if (!doc.exists) { console.log('No such document!'); }
-        else {
-            // console.log(doc.data());
-            requestData.push(doc.data())
-    
-        }
-    
-    })
-    
-        .catch(err => {
-             console.log('Error getting document', err);
-            });
-      
-        }
-    
-    }   
-
-app.get('/requestslist',ensureAuth, async (request,response) =>{
-    var db_result = await getRequestsData();
-    // console.log(fireBaseData)
-    function timedOut(){
-        const sortByDate = requestData => {
-            const sorter = (a, b) => {
-               return new Date(b.sortedDate).getTime() - new Date(a.sortedDate).getTime();
-            }
-            requestData.sort(sorter);
-         };
-         sortByDate(requestData);
-    response.render('requestslist',{
-        requestData: requestData,
-            siteDate: siteDate,
-            siteName: siteTitle
-    });
-}
-setTimeout(timedOut, 1000);
-
-    });
-
-
-
-
-
-
-    app.get("/new", ensureAuth, async (req, res) => {
-      
-        const auth = new google.auth.GoogleAuth({
-          keyFile: "credentials.json",
-          scopes: "https://www.googleapis.com/auth/spreadsheets",
-        });
-      
-        // Create client instance for auth
-        const client = await auth.getClient();
-      
-        // Instance of Google Sheets API
-        const googleSheets = google.sheets({ version: "v4", auth: client });
-      
-        const spreadsheetId = "1SXBaISO7rlmxBkEhS7Gz98BtCQSJLs9JyV3RKDE4KEc";
-      
-        // Get metadata about spreadsheet
-        const metaData = await googleSheets.spreadsheets.get({
-          auth,
-          spreadsheetId,
-        });
-        // res.send(metaData.data);
-      
-        // Read rows from spreadsheet
-        const getRows = await googleSheets.spreadsheets.values.get({
-          auth,
-          spreadsheetId,
-          // range: "Sheet1!A:A",
-          range: "Sheet For Users!A:F",
-        });
-      
-       let specRows = getRows.data.values;
-       specRows.splice(0,7);
-       let newSep = []
-        for (const d of specRows){
-          if(d[2] == 'Andhra Pradesh'){
-            t={
-              "name":d[0],
-              "phno":d[1].slice(0,10),
-              "state":d[2],
-              "district":d[3],
-              "status":d[4],
-              "lastUpdated":d[5],
-            }
-            newSep.push(t);
-          }
-      
-        
-        }
-      //  console.log(newSep);
-    //   for(const b of newSep){
-    //     console.log(b.name);
-    //   }
-        res.render('new',{
-            oxygensList:newSep, 
-        });
-      
+      .catch((err) => {
+        console.log("Error getting document", err);
       });
+  }
+}
+
+app.get("/plasmadonorslist", ensureAuth, async (request, response) => {
+  var db_result = await getPlasmaDonorsData();
+  // console.log(fireBaseData)
+  function timedOut() {
+    const sortByDate = (plasmaDonorsData) => {
+      const sorter = (a, b) => {
+        return (
+          new Date(b.sortedDate).getTime() - new Date(a.sortedDate).getTime()
+        );
+      };
+      plasmaDonorsData.sort(sorter);
+    };
+    sortByDate(plasmaDonorsData);
+    response.render("plasmadonorslist", {
+      plasmaDonorsData: plasmaDonorsData,
+      siteDate: siteDate,
+      siteName: siteTitle,
+    });
+  }
+  setTimeout(timedOut, 1000);
+});
+
+var requestData = [];
+
+async function getRequestsData() {
+  requestData = [];
+  const firestore_con = await admin.firestore();
+
+  const documentReferences = await firestore_con
+    .collection("requestdata")
+    .listDocuments();
+  const documentIds = documentReferences.map((it) => it.id);
+  i = 0;
+  for (const i of documentIds) {
+    const writeResult = firestore_con
+      .collection("requestdata")
+      .doc(i)
+      .get()
+      .then((doc) => {
+        if (!doc.exists) {
+          console.log("No such document!");
+        } else {
+          // console.log(doc.data());
+          requestData.push(doc.data());
+        }
+      })
+
+      .catch((err) => {
+        console.log("Error getting document", err);
+      });
+  }
+}
+
+app.get("/requestslist", ensureAuth, async (request, response) => {
+  var db_result = await getRequestsData();
+  // console.log(fireBaseData)
+  function timedOut() {
+    const sortByDate = (requestData) => {
+      const sorter = (a, b) => {
+        return (
+          new Date(b.sortedDate).getTime() - new Date(a.sortedDate).getTime()
+        );
+      };
+      requestData.sort(sorter);
+    };
+    sortByDate(requestData);
+    response.render("requestslist", {
+      requestData: requestData,
+      siteDate: siteDate,
+      siteName: siteTitle,
+    });
+  }
+  setTimeout(timedOut, 1000);
+});
+
+app.get("/oxygen", ensureAuth, async (req, res) => {
+  const auth = new google.auth.GoogleAuth({
+    keyFile: "credentials.json",
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
+  });
+
+  // Create client instance for auth
+  const client = await auth.getClient();
+
+  // Instance of Google Sheets API
+  const googleSheets = google.sheets({ version: "v4", auth: client });
+
+  const spreadsheetId = "1SXBaISO7rlmxBkEhS7Gz98BtCQSJLs9JyV3RKDE4KEc";
+
+  // Get metadata about spreadsheet
+  const metaData = await googleSheets.spreadsheets.get({
+    auth,
+    spreadsheetId,
+  });
+  // res.send(metaData.data);
+
+  // Read rows from spreadsheet
+  const getRows = await googleSheets.spreadsheets.values.get({
+    auth,
+    spreadsheetId,
+    // range: "Sheet1!A:A",
+    range: "Sheet For Users!A:F",
+  });
+
+  let specRows = getRows.data.values;
+  specRows.splice(0, 7);
+  let newSep = [];
+  for (const d of specRows) {
+    if (d[2] == "Andhra Pradesh") {
+      d[5] = [d[5].slice(0, 5), "/2021", d[5].slice(5)].join("");  
+      if(d[3] == 'ongole'){
+        d[3]= 'Ongole'
+    }   
+    if(d[3] == 'visakhapatnam'){
+        d[3]= 'Visakhapatnam'
+    }  
+    
+      t = {
+        name: d[0],
+        phno: d[1].slice(0, 10),
+        state: d[2],
+        location: d[3],
+        status: d[4],
+        lastUpdated: d[5],
+      };
       
+      newSep.push(t);
+    }
+  }
+  //  console.log(newSep);
+    // for(const b of newSep){
+    //   console.log(b.location);
+    // }
+  res.render("oxygen", {
+    oxygensList: newSep,
+    siteName: siteTitle,
+    siteDate: siteDate,
+  });
+});
 
+// var oxygenChatData=[];
 
+// async function getOxygenChatData(){
+//     oxygenChatData=[];
+//     const firestore_con  = await admin.firestore();
 
+// const documentReferences =  await firestore_con.collection('oxygenchat').listDocuments()
+// const documentIds = documentReferences.map(it => it.id)
+// // console.log(documentIds)
+// i=0;
+// for (const i of documentIds){
+//     const writeResult = firestore_con.collection('oxygenchat').doc(i).get().then(doc => {
+//     if (!doc.exists) { console.log('No such document!'); }
+//     else {
+//         // console.log(doc.data());
+//         oxygenChatData.push(doc.data())
 
+//     }
 
+// })
 
+//     .catch(err => {
+//          console.log('Error getting document', err);
+//         });
 
+//     }
 
+// }
 
-
-
-
-
-
-
-
-
-    // var oxygenChatData=[];
-
-    // async function getOxygenChatData(){
-    //     oxygenChatData=[];
-    //     const firestore_con  = await admin.firestore();
-    
-    // const documentReferences =  await firestore_con.collection('oxygenchat').listDocuments()
-    // const documentIds = documentReferences.map(it => it.id)
-    // // console.log(documentIds)
-    // i=0;
-    // for (const i of documentIds){
-    //     const writeResult = firestore_con.collection('oxygenchat').doc(i).get().then(doc => {
-    //     if (!doc.exists) { console.log('No such document!'); }
-    //     else {
-    //         // console.log(doc.data());
-    //         oxygenChatData.push(doc.data())
-    
-    //     }
-    
-    // })
-    
-    //     .catch(err => {
-    //          console.log('Error getting document', err);
-    //         });
-      
-    //     }
-    
-    // }   
-
-
-    // OxygenChat get method
+// OxygenChat get method
 
 // app.get('/oxygen-chat',ensureAuth, async (request,response) =>{
 //     var db_result = await getOxygenChatData();
@@ -1254,7 +1245,7 @@ setTimeout(timedOut, 1000);
 //           }
 
 //     response.render('oxygen-chat',{
-       
+
 //         oxygenChatData: oxygenChatData,
 //             siteDate: siteDate,
 //             siteName: siteTitle,
@@ -1265,299 +1256,295 @@ setTimeout(timedOut, 1000);
 
 //     });
 
+var newsData = [];
 
+async function getNewsData() {
+  newsData = [];
+  const firestore_con = await admin.firestore();
 
-
-var newsData=[];
-
-async function getNewsData(){
-    newsData=[];
-    const firestore_con  = await admin.firestore();
-
-const documentReferences =  await firestore_con.collection('newsdata').listDocuments()
-const documentIds = documentReferences.map(it => it.id)
-i=0;
-for (const i of documentIds){
-    const writeResult = firestore_con.collection('newsdata').doc(i).get().then(doc => {
-    if (!doc.exists) { console.log('No such document!'); }
-    else {
-        // console.log(doc.data());
-        newsData.push(doc.data())
-
-    }
-
-})
-
-    .catch(err => {
-         console.log('Error getting document', err);
-        });
-  
-    }
-
-}   
-
-app.get('/feed',ensureAuth, async (request,response) =>{
-var db_result = await getNewsData();
-// console.log(fireBaseData)
-function timedOut(){
-    const sortByDate = newsData => {
-        const sorter = (a, b) => {
-           return new Date(b.Date).getTime() - new Date(a.Date).getTime();
+  const documentReferences = await firestore_con
+    .collection("newsdata")
+    .listDocuments();
+  const documentIds = documentReferences.map((it) => it.id);
+  i = 0;
+  for (const i of documentIds) {
+    const writeResult = firestore_con
+      .collection("newsdata")
+      .doc(i)
+      .get()
+      .then((doc) => {
+        if (!doc.exists) {
+          console.log("No such document!");
+        } else {
+          // console.log(doc.data());
+          newsData.push(doc.data());
         }
-        newsData.sort(sorter);
-     };
-     sortByDate(newsData);
-response.render('feed',{
-    newsData: newsData,
-        siteDate: siteDate,
-        siteName: siteTitle
-});
+      })
+
+      .catch((err) => {
+        console.log("Error getting document", err);
+      });
+  }
 }
-setTimeout(timedOut, 1000);
 
+app.get("/feed", ensureAuth, async (request, response) => {
+  var db_result = await getNewsData();
+  // console.log(fireBaseData)
+  function timedOut() {
+    const sortByDate = (newsData) => {
+      const sorter = (a, b) => {
+        return new Date(b.Date).getTime() - new Date(a.Date).getTime();
+      };
+      newsData.sort(sorter);
+    };
+    sortByDate(newsData);
+    response.render("feed", {
+      newsData: newsData,
+      siteDate: siteDate,
+      siteName: siteTitle,
+    });
+  }
+  setTimeout(timedOut, 1000);
 });
-
-
-
-
-
-
 
 exports.app = functions.https.onRequest(app);
-     
 
 // form data
-async function insertBloodData(request){
-const writeResult = await admin.firestore().collection('blooddonordata').add({
-    name: request.body.donorname,
-    email: request.body.donoremail,
-    phone: request.body.donorphone,
-    age: request.body.donorage,
-    gender: request.body.donorgender,
-    covidstatus: request.body.covidstatus,
-    bloodgroup: request.body.donorbloodgroup,
-    district: request.body.donordistrict,
-    state: request.body.donorstate,
-    address: request.body.donoraddress,
-    unixTimeStamp: + new Date(),
-    sortedDate: moment().format('lll'),
-
-})
-.then(function() {console.log("Document successfully written!");})
-.catch(function(error) {console.error("Error writing document: ", error);});
+async function insertBloodData(request) {
+  const writeResult = await admin
+    .firestore()
+    .collection("blooddonordata")
+    .add({
+      name: request.body.donorname,
+      email: request.body.donoremail,
+      phone: request.body.donorphone,
+      age: request.body.donorage,
+      gender: request.body.donorgender,
+      covidstatus: request.body.covidstatus,
+      bloodgroup: request.body.donorbloodgroup,
+      district: request.body.donordistrict,
+      state: request.body.donorstate,
+      address: request.body.donoraddress,
+      unixTimeStamp: +new Date(),
+      sortedDate: moment().format("lll"),
+    })
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
 }
 
-async function insertPlasmaData(request){
-    const writeResult = await admin.firestore().collection('plasmadonordata').add({
-        name: request.body.donorname,
-        email: request.body.donoremail,
-        phone: request.body.donorphone,
-        age: request.body.donorage,
-        gender: request.body.donorgender,
-        covidstatus: request.body.covidstatus,
-        // positivedate: request.body.positivedate,
-        donordiseases: request.body.donordiseases,
-        alcoholstatus: request.body.alcoholstatus,
-        vaccinestatus: request.body.vaccinestatus,
-        bloodgroup: request.body.donorbloodgroup,
-        district: request.body.donordistrict,
-        state: request.body.donorstate,
-        address: request.body.donoraddress,
-        unixTimeStamp: + new Date(),
-        sortedDate: moment().format('lll'),
+async function insertPlasmaData(request) {
+  const writeResult = await admin
+    .firestore()
+    .collection("plasmadonordata")
+    .add({
+      name: request.body.donorname,
+      email: request.body.donoremail,
+      phone: request.body.donorphone,
+      age: request.body.donorage,
+      gender: request.body.donorgender,
+      covidstatus: request.body.covidstatus,
+      // positivedate: request.body.positivedate,
+      donordiseases: request.body.donordiseases,
+      alcoholstatus: request.body.alcoholstatus,
+      vaccinestatus: request.body.vaccinestatus,
+      bloodgroup: request.body.donorbloodgroup,
+      district: request.body.donordistrict,
+      state: request.body.donorstate,
+      address: request.body.donoraddress,
+      unixTimeStamp: +new Date(),
+      sortedDate: moment().format("lll"),
     })
-    .then(function() {console.log("Document successfully written!");})
-    .catch(function(error) {console.error("Error writing document: ", error);});
-    }
-    
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+}
 
-    async function insertRequestsData(request){
-        const writeResult = await admin.firestore().collection('requestdata').add({
-            patientname: request.body.patientname,
-            attendantname: request.body.attendantname,
-            attendantemail: request.body.attendantemail,
-            attendantphone: request.body.attendantphone,
-            patientage: request.body.patientage,
-            patientgender: request.body.patientgender,
-            doctorapproval: request.body.doctorapproval,
-            lookingfor: request.body.lookingfor,
-            patientbloodgroup: request.body.patientbloodgroup,
-            hospitalname: request.body.hospitalname,
-            patientdistrict: request.body.patientdistrict,
-            patientstate: request.body.patientstate,
-            patientaddress: request.body.patientaddress,
-            posteddate: currentDate,
-            unixTimeStamp: + new Date(),
-            sortedDate: moment().format('lll'),
-        })
-        .then(function() {console.log("Document successfully written!");})
-        .catch(function(error) {console.error("Error writing document: ", error);});
-        }
-        
+async function insertRequestsData(request) {
+  const writeResult = await admin
+    .firestore()
+    .collection("requestdata")
+    .add({
+      patientname: request.body.patientname,
+      attendantname: request.body.attendantname,
+      attendantemail: request.body.attendantemail,
+      attendantphone: request.body.attendantphone,
+      patientage: request.body.patientage,
+      patientgender: request.body.patientgender,
+      doctorapproval: request.body.doctorapproval,
+      lookingfor: request.body.lookingfor,
+      patientbloodgroup: request.body.patientbloodgroup,
+      hospitalname: request.body.hospitalname,
+      patientdistrict: request.body.patientdistrict,
+      patientstate: request.body.patientstate,
+      patientaddress: request.body.patientaddress,
+      posteddate: currentDate,
+      unixTimeStamp: +new Date(),
+      sortedDate: moment().format("lll"),
+    })
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+}
 
-        async function insertFeedbackData(request){
-            const writeResult = await admin.firestore().collection('feedbackdata').add({
-                Name: request.body.feedbackname,
-                Phone: request.body.feedbacknumber,
-                Email: request.body.feedbackemail,
-                Rating: request.body.feedbackrating,
-                Feedback: request.body.feedback,
-                unixTimeStamp: + new Date(),
-                sortedDate: moment().format('lll'), 
-            })
-            .then(function() {console.log("Document successfully written!");})
-            .catch(function(error) {console.error("Error writing document: ", error);});
-            }
+async function insertFeedbackData(request) {
+  const writeResult = await admin
+    .firestore()
+    .collection("feedbackdata")
+    .add({
+      Name: request.body.feedbackname,
+      Phone: request.body.feedbacknumber,
+      Email: request.body.feedbackemail,
+      Rating: request.body.feedbackrating,
+      Feedback: request.body.feedback,
+      unixTimeStamp: +new Date(),
+      sortedDate: moment().format("lll"),
+    })
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+}
 
+async function insertOxygenChatData(request) {
+  const writeResult = await admin
+    .firestore()
+    .collection("oxygenchat")
+    .add({
+      Message: request.body.message,
+      Email: request.body.email,
+      Date: new Date().toString(),
+      unixTimeStamp: unixTimeStamp,
+    })
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+}
 
-            async function insertOxygenChatData(request){
-                const writeResult = await admin.firestore().collection('oxygenchat').add({
-                    Message: request.body.message,
-                    Email: request.body.email,
-                    Date: new Date().toString(),
-                    unixTimeStamp: unixTimeStamp
-                    
-                })
-                .then(function() {console.log("Document successfully written!");})
-                .catch(function(error) {console.error("Error writing document: ", error);});
-                }
-                
-            
+async function insertNewsData(request) {
+  const writeResult = await admin
+    .firestore()
+    .collection("newsdata")
+    .add({
+      Title: request.body.newstitle,
+      Content: request.body.newscontent,
+      unixTimeStamp: +new Date(),
+      Date: moment().format("lll"),
+      type: request.body.newstype,
+    })
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+}
 
-                async function insertNewsData(request){
-                    const writeResult = await admin.firestore().collection('newsdata').add({
-                        Title: request.body.newstitle,
-                        Content: request.body.newscontent,
-                        unixTimeStamp: + new Date(),
-                        Date: moment().format('lll'),
-                        type: request.body.newstype
-
-
-                        
-                    })
-                    .then(function() {console.log("Document successfully written!");})
-                    .catch(function(error) {console.error("Error writing document: ", error);});
-                    }
-
-
-                    
-                async function insertRemoveData(request){
-                    const writeResult = await admin.firestore().collection('removedata').add({
-                        Name: request.body.removename,
-                        Category: request.body.category,
-                        Phone: request.body.removephone,
-                        Email: request.body.removeemail,
-                        Reason: request.body.reasoneremove,
-                        unixTimeStamp: + new Date(),
-                        Date: moment().format('lll'),
-
-
-                        
-                    })
-                    .then(function() {console.log("Document successfully written!");})
-                    .catch(function(error) {console.error("Error writing document: ", error);});
-                    }
+async function insertRemoveData(request) {
+  const writeResult = await admin
+    .firestore()
+    .collection("removedata")
+    .add({
+      Name: request.body.removename,
+      Category: request.body.category,
+      Phone: request.body.removephone,
+      Email: request.body.removeemail,
+      Reason: request.body.reasoneremove,
+      unixTimeStamp: +new Date(),
+      Date: moment().format("lll"),
+    })
+    .then(function () {
+      console.log("Document successfully written!");
+    })
+    .catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
+}
 
 // app.post('/insert_data',async (request,response) =>{
 //     var insert = await insertBloodData(request);
 //     response.sendStatus(200);
 //     });
-app.get('/success' , ensureAuth, (req,res)=>{
-    res.render("success",{
-            siteDate: siteDate,
-            siteName: siteTitle
-    });
-})
+app.get("/success", ensureAuth, (req, res) => {
+  res.render("success", {
+    siteDate: siteDate,
+    siteName: siteTitle,
+  });
+});
 
-app.post('/donateblood',async (request,response) =>{
-    var insert = await insertBloodData(request);
-    response.redirect("/success")
-    // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your blood..! ');
-    });
-    
-    app.post('/donateplasma',async (request,response) =>{
-        var insert = await insertPlasmaData(request);
-        response.redirect("/success")
+app.post("/donateblood", async (request, response) => {
+  var insert = await insertBloodData(request);
+  response.redirect("/success");
+  // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your blood..! ');
+});
 
-        // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
-        });
+app.post("/donateplasma", async (request, response) => {
+  var insert = await insertPlasmaData(request);
+  response.redirect("/success");
 
-        app.post('/request',async (request,response) =>{
-            var insert = await insertRequestsData(request);
-            response.redirect("/success")
-    
-            // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
-            });
+  // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
+});
 
-            app.post('/feedback',async (request,response) =>{
-                var insert = await insertFeedbackData(request);
-                response.redirect("/success")
-        
-                // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
-                });
+app.post("/request", async (request, response) => {
+  var insert = await insertRequestsData(request);
+  response.redirect("/success");
 
-                app.post('/oxygen-chat',async (request,response) =>{
-                    var insert = await insertOxygenChatData(request);
-                    response.redirect("/oxygen-chat")
-            
-                    // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
-                    });
-                    app.post('/fire',async (request,response) =>{
-                        var insert = await insertNewsData(request);
-                        response.redirect("/success")
-                
-                        // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
-                        });
-                        app.post('/remove-info',async (request,response) =>{
-                            var insert = await insertRemoveData(request);
-                            response.redirect("/success")
-                    
-                            // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
-                            });
+  // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
+});
 
-app.get('/fire', (req,res)=>{
-    res.render('fire')
-})
+app.post("/feedback", async (request, response) => {
+  var insert = await insertFeedbackData(request);
+  response.redirect("/success");
 
+  // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
+});
 
+app.post("/oxygen-chat", async (request, response) => {
+  var insert = await insertOxygenChatData(request);
+  response.redirect("/oxygen-chat");
 
+  // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
+});
+app.post("/fire", async (request, response) => {
+  var insert = await insertNewsData(request);
+  response.redirect("/success");
 
+  // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
+});
+app.post("/remove-info", async (request, response) => {
+  var insert = await insertRemoveData(request);
+  response.redirect("/success");
 
+  // response.send('<i class="fas fa-tint" style="color: crimson"></i> Your data has been recorded, thanks for donating your Plasma..! ');
+});
 
+app.get("/fire", (req, res) => {
+  res.render("fire");
+});
 
-
-
-
-
-                  
 //     firestore_con.listCollections()
 //     .then(snapshot=>{
 //      snapshot.forEach(snaps=>{
-//          // console.log(snaps["_queryOptions"].collectionId);  
+//          // console.log(snaps["_queryOptions"].collectionId);
 //      })
 //  })
 //  .catch(error=>console.log(error));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var htmlemail =   `
+var htmlemail = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "https://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 
@@ -1888,8 +1875,7 @@ You are receiving this email because you just registered in this website.
 		</div>
 		
 	</body>
-	</html>`
+	</html>`;
 
-
-    module.exports = app;
+module.exports = app;
 module.exports.handler = serverless(app);
