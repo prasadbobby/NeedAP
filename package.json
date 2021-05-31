@@ -1,6 +1,6 @@
 {
   "name": "needap",
-  "version": "1.0.0",
+  "version": "1.1",
   "description": "Need AP application",
   "main": "index.js",
   "scripts": {
