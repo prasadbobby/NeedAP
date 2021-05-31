@@ -1,7 +1,7 @@
 
 
 
-const CACHE_NAME = "NeedAP-V1.1";
+const CACHE_NAME = "NeedAP-V1.2";
 const urlsToCache = [ 'test.html', 'offline.html' ];
 
 const self = this;

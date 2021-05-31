@@ -10,7 +10,7 @@ document['addEventListener']('DOMContentLoaded', () => {
     let _0x7043x2 = true;
     let _0x7043x3 = true;
     var _0x7043x4 = 'Need AP';
-    var _0x7043x5 = 1.1;
+    var _0x7043x5 = 1;
     var _0x7043x6 = false;
     var _0x7043x7 = '/';
     var _0x7043x8 = '_service-worker.js';
@@ -1727,38 +1727,38 @@ document['addEventListener']('DOMContentLoaded', () => {
 // console.clear();
 
 
-// console.log(`%c
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-// .                                                                                 .
-// .                                                                                 .
-// .                                                                                 .
-// .                      uuuuuuu                                                    .
-// .                  uu$$$$$$$$$$$uu                                                .
-// .               uu$$$$$$$$$$$$$$$$$uu                                             .
-// .              u$$$$$$$$$$$$$$$$$$$$$u                                            .
-// .             u$$$$$$$$$$$$$$$$$$$$$$$u                                           .
-// .            u$$$$$$$$$$$$$$$$$$$$$$$$$u                   K E E P  C A L M       .
-// .            u$$$$$$$$$$$$$$$$$$$$$$$$$u                                          .
-// .            u$$$$$$"   "$$$"   "$$$$$$u                  # S T A Y  H O M E      .
-// .            "$$$$"      u$u       $$$$"                                          .
-// .             $$$u       u$u       u$$$                   # S T A Y  S A F E      .
-// .             $$$u      u$$$u      u$$$                                           .
-// .              "$$$$uu$$$   $$$uu$$$$"                                            .
-// .               "$$$$$$$"   "$$$$$$$"                                             .
-// .                 u$$$$$$$u$$$$$$$u                          N E E D  A P -       .
-// .                  u$"$"$"$"$"$"$u                                                .
-// .       uuu        $$u$ $ $ $ $u$$       uuu                                      .
-// .      u$$$$        $$$$$u$u$u$$$       u$$$$                                     .
-// .       $$$$$uu      "$$$$$$$$$"     uu$$$$$$                                     .
-// .     u$$$$$$$$$$$uu    """""    uuuu$$$$$$$$$$                                   .
-// .     $$$$"""$$$$$$$$$$uuu   uu$$$$$$$$$"""$$$"                                   .
-// .      """      ""$$$$$$$$$$$uu ""$"""                                            .
-// .                uuuu ""$$$$$$$$$$uuu                                             .
-// .       u$$$uuu$$$$$$$$$uu ""$$$$$$$$$$$uuu$$$                                    .
-// .       $$$$$$$$$$""""           ""$$$$$$$$$$$"                NEED AP            .
-// .        "$$$$$"                      ""$$$$""       knvdurgaprasad610@gmail.com  .
-// .          $$$"                         $$$$"                                     .
-// .                                                                                 .
-// . This site is only for our Community. So, don't try to check the vulnerabilities :).
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .`,"color:#00bfff; background:#000000; font-family: monospace");
+console.log(`%c
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+.                                                                                 .
+.                                                                                 .
+.                                                                                 .
+.                      uuuuuuu                                                    .
+.                  uu$$$$$$$$$$$uu                                                .
+.               uu$$$$$$$$$$$$$$$$$uu                                             .
+.              u$$$$$$$$$$$$$$$$$$$$$u                                            .
+.             u$$$$$$$$$$$$$$$$$$$$$$$u                                           .
+.            u$$$$$$$$$$$$$$$$$$$$$$$$$u                   K E E P  C A L M       .
+.            u$$$$$$$$$$$$$$$$$$$$$$$$$u                                          .
+.            u$$$$$$"   "$$$"   "$$$$$$u                  # S T A Y  H O M E      .
+.            "$$$$"      u$u       $$$$"                                          .
+.             $$$u       u$u       u$$$                   # S T A Y  S A F E      .
+.             $$$u      u$$$u      u$$$                                           .
+.              "$$$$uu$$$   $$$uu$$$$"                                            .
+.               "$$$$$$$"   "$$$$$$$"                                             .
+.                 u$$$$$$$u$$$$$$$u                          N E E D  A P -       .
+.                  u$"$"$"$"$"$"$u                                                .
+.       uuu        $$u$ $ $ $ $u$$       uuu                                      .
+.      u$$$$        $$$$$u$u$u$$$       u$$$$                                     .
+.       $$$$$uu      "$$$$$$$$$"     uu$$$$$$                                     .
+.     u$$$$$$$$$$$uu    """""    uuuu$$$$$$$$$$                                   .
+.     $$$$"""$$$$$$$$$$uuu   uu$$$$$$$$$"""$$$"                                   .
+.      """      ""$$$$$$$$$$$uu ""$"""                                            .
+.                uuuu ""$$$$$$$$$$uuu                                             .
+.       u$$$uuu$$$$$$$$$uu ""$$$$$$$$$$$uuu$$$                                    .
+.       $$$$$$$$$$""""           ""$$$$$$$$$$$"                NEED AP            .
+.        "$$$$$"                      ""$$$$""       knvdurgaprasad610@gmail.com  .
+.          $$$"                         $$$$"                                     .
+.                                                                                 .
+. This site is only for our Community. So, don't try to check the vulnerabilities :).
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .`,"color:#00bfff; background:#000000; font-family: monospace");
      

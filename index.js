@@ -4,6 +4,7 @@ require("./src/db/conn");
 // require('newrelic');
 const serverless = require("serverless-http");
 const usersData = require("./src/models/usersData");
+// const sheets = require("./google-sheets.json");
 // require("./mail");
 const { range } = require("balanced-match");
 const { google } = require("googleapis");
@@ -1134,7 +1135,7 @@ app.get("/requestslist", ensureAuth, async (request, response) => {
 
 app.get("/oxygen", ensureAuth, async (req, res) => {
   const auth = new google.auth.GoogleAuth({
-    keyFile: "credentials.json",
+    keyFile: 'google-sheets.json',
     scopes: "https://www.googleapis.com/auth/spreadsheets",
   });
 
