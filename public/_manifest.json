@@ -32,5 +32,78 @@
       "purpose": "any maskable"
     }
     
-  ]
+  ],
+  "shortcuts": [
+    {
+ 
+      "name": "Hospital Beds",
+
+      "description": "Hospital beds availibility",
+
+      "url": "https://www.needap.in/beds",
+
+      "icons": [
+
+         {
+
+            "src": "app/icons/hospital-bed.svg",
+
+            "type": "image/svg+xml",
+
+            "purpose": "any"
+
+         }
+
+      ]
+
+   },
+   {
+ 
+    "name": "Oxygen Availibility",
+
+    "description": "Oxygen availibility",
+
+    "url": "https://www.needap.in/oxygen",
+
+    "icons": [
+
+       {
+
+          "src": "app/icons/oxygen-tank.svg",
+
+          "type": "image/svg+xml",
+
+          "purpose": "any"
+
+       }
+
+    ]
+
+ },
+
+    {
+ 
+       "name": "Developer Contact",
+ 
+       "description": "Need AP Developer",
+ 
+       "url": "https://www.needap.in/developer",
+ 
+       "icons": [
+ 
+          {
+ 
+             "src": "app/icons/graduation-hat.svg",
+ 
+             "type": "image/svg+xml",
+ 
+             "purpose": "any"
+ 
+          }
+ 
+       ]
+ 
+    }
+ 
+ ]
 }
