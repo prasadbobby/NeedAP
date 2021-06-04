@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
-<title>{{siteName}} - DOnate Blood</title>
+<title>{{siteName}} - Donate Blood</title>
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
 <meta name="author" content="Prasad Bobby">
@@ -169,7 +169,6 @@ Default Checkboxes, styled with FontAwesome. You can use absolutely <strong clas
 <div class="card card-style">
 <div class="content mb-0">
 <h3>Register as a Blood Donor</h3> 
-<h3 id="success"></h3>
 <p>
 Please fill the form if you want to donate your blood. Please make sure that the information is genuine, as we will be verifying the details submitted. 
 All information remains confidential.
@@ -189,13 +188,13 @@ All information remains confidential.
 <i class="fa fa-check disabled valid color-green-dark"></i>
 <em>(required)</em>
 </div>
-<div class="input-style has-borders no-icon validate-field mb-4">
+{{!-- <div class="input-style has-borders no-icon validate-field mb-4">
 <input type="tel" class="form-control validate-text" id="phone" name="donorphone" required autocomplete="off" placeholder="Phone">
 <label for="phone" class="color-highlight">Phone</label>
 <i class="fa fa-times disabled invalid color-red-dark"></i>
 <i class="fa fa-check disabled valid color-green-dark"></i>
 <em>(required)</em>
-</div>
+</div> --}}
 <div class="input-style has-borders no-icon validate-field mb-4">
 <input type="number" class="form-control validate-text" id="age" min="18" max="60" name="donorage" required autocomplete="off" placeholder="Age">
 <label for="age" class="color-highlight">Age</label>
@@ -204,7 +203,7 @@ All information remains confidential.
 <em>(required)</em>
 </div>
 <div class="col-3 mb-3" style="padding-left: 9px!important;">
-<label for="gender" class="">Gender</label>
+<label >Gender</label>
 <div class="form-check icon-check">
 <input class="form-check-input" type="radio" name="donorgender" required value="Male" id="male">
 <label class="form-check-label" for="male">Male</label>
@@ -225,7 +224,7 @@ All information remains confidential.
 </div>
 </div>
 <div class="col-3 mb-3" style="padding-left: 9px!important; width:80%;">
-<label for="areyou" class="">Are you ?</label>
+<label >Are you ?</label>
 <div class="form-check icon-check">
 <input class="form-check-input" type="radio" name="covidstatus" required value="Recovered COVID Patient"  id="recovered">
 <label class="form-check-label" for="recovered">Recovered COVID Patient</label>
@@ -332,43 +331,72 @@ All information remains confidential.
 3.{{siteName}} does not gaurantee to find a blood donor, but we shall do our level best to connect you with a qualified donor.</p>
 </div>
 
-<input type="submit" value="Submit" class="close-menu mt-3 mb-4 btn btn-m btn-center-l rounded-s shadow-xl text-uppercase font-900 bg-blue-dark submit-btn">
+
 <div class="content">
-{{!-- <a data-menu="menu-success-2" id="clicker">
 
-</a>
-
-<div id="suc" class="modal menu menu-box-bottom bg-green-dark rounded-m" data-menu-height="364" data-menu-effect="menu-over" style="margin-top: 530px; transition:all 2s ease">
-<h1 class="text-center mt-4">
-    <lottie-player src="scripts/lot.json"  background="transparent"  speed="1" style="width: 125px; height:125px; position:absolute;top:20%;left:50%;transform:translate(-50%,-50%)" class="shadow-xl rounded-circle" loop autoplay></lottie-player>
-    </h1>
-<h1 class="text-center font-700 color-white" style="margin-top: 120px;">All's Good</h1>
-<p class="boxed-text-l color-white opacity-70">
-You can continue with your previous actions.<br> Easy to attach these to success calls.
-</p>
-<a href="/home" class="close-menu btn btn-m btn-center-m button-s shadow-l rounded-s text-uppercase font-600 bg-white color-black">Great, Thanks!</a>
-</div> --}}
 <p class="hidden color-highlight font-13 opacity-80"></p>
 </div>
 </div>
 </form>
+<a href="#" class=" mt-3 mb-4 btn btn-m btn-center-l rounded-s shadow-xl text-uppercase font-900 bg-blue-dark "  data-menu="menu-verifyphone">Submit</a>
 </div>
 </div>
 
-      <div id="loader"></div>
+</div>
 
-{{!-- <div data-menu-load="/menu-footer"></div>
-</div> --}}
 
+
+<div id="menu-verifyphone" class="menu menu-box-bottom rounded-m" data-menu-height="300" data-menu-effect="menu-over">
+<div class="menu-title">
+<p class="color-highlight">Let's get you into your account,</p>
+<h1 class="font-24">Verify Number</h1>
+<a href="#" class="close-menu"><i class="fa fa-times-circle"></i></a>
+</div>
+<div class="content mt-0 mb-0">
+<div class="input-style no-borders has-icon validate-field mb-4">
+<i class="fas fa-phone-alt"></i>
+<input type="tel" class="form-control validate-name" maxlength="10" form="formid" name="donorphone" id="verifyphone" placeholder="Enter your 10 digit number">
+<label for="verifyphone" class="color-highlight font-11 font-500">Phone</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div id="recaptcha-container" style="margin: 10px;"></div>
+<a href="#"  data-menu="menu-verifyotp" class="btn btn-full btn-m shadow-l rounded-s bg-highlight font-600 top-20" onclick="phoneAuth();">SEND OTP</a>
+</div>
+</div>
+
+<div id="menu-verifyotp" class="menu menu-box-bottom rounded-m" data-menu-height="250" data-menu-effect="menu-over">
+<div class="menu-title">
+<p class="color-highlight">Let's get you into your account,</p>
+<h1 class="font-24">Verify OTP</h1>
+<a href="#" class="close-menu"><i class="fa fa-times-circle"></i></a>
+</div>
+<div class="content mt-0 mb-0">
+<div class="input-style no-borders has-icon validate-field mb-4">
+<i class="fa fa-envelope"></i>
+<input type="number" class="form-control validate-name" maxlength="6" id="verifyotp" placeholder="Enter your OTP">
+<label for="verifyotp" class="color-highlight font-11 font-500">OTP</label>
+<i class="fa fa-times disabled invalid color-red-dark"></i>
+<i class="fa fa-check disabled valid color-green-dark"></i>
+<em>(required)</em>
+</div>
+<div class="row mb-0">
+<div class="col-6">
+<a href="#" class="btn btn-full btn-m bg-highlight shadow-l font-600 rounded-s" data-menu="menu-verifyphone">Resend</a>
+</div>
+<div class="col-6">
+<a href="#" class="btn btn-full btn-m bg-highlight shadow-l font-600 rounded-s"  onclick="codeverify();">Verify</a>
+</div>
+</div>
+</div>
+</div>
 
 <div id="menu-main" class="menu menu-box-left rounded-0" data-menu-load="/menu-main" data-menu-width="280" data-menu-active="nav-welcome"></div>
 
 <div id="menu-share" class="menu menu-box-bottom rounded-m" data-menu-load="/menu-share" data-menu-height="370"></div>
 <div id="menu-feedback" class="menu menu-box-bottom rounded-m" data-menu-load="/menu-feedback" data-menu-height="452" data-menu-effect="menu-over"></div>
 <div id="menu-qr" class="menu menu-box-bottom rounded-m bg-theme" data-menu-height="400" data-menu-load="/menu-qr" ></div>
-
-{{!-- <div id="menu-colors" class="menu menu-box-bottom rounded-m" data-menu-load="menu-colors.html" data-menu-height="480"></div> --}}
-</div>
 
 {{!-- popup-1 --}}
 <div id="article-1" class="menu menu-box-bottom menu-box-bottom-full rounded-0" data-menu-width="cover" data-menu-height="cover">
@@ -547,34 +575,71 @@ You can continue with your previous actions.<br> Easy to attach these to success
 </div>
 
 {{!-- popup-4 ending --}}
+{{!-- <script src="https://www.gstatic.com/firebasejs/8.6.0/firebase-app.js"></script> --}}
+
+
 <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
+
 <script>
- 
-    $(document).ready(function(){
- 
- 
-$('#formid').submit(function(){
+const firebaseConfig = {
+    apiKey: "AIzaSyAOGeYvesOJ4hChuWX0eS7YHUk83QnAx9M",
+    authDomain: "test-bobby-needap.firebaseapp.com",
+    databaseURL: "https://test-bobby-needap-default-rtdb.firebaseio.com",
+    projectId: "test-bobby-needap",
+    storageBucket: "test-bobby-needap.appspot.com",
+    messagingSenderId: "631230685784",
+    appId: "1:631230685784:web:e7ab78327f633d0c7fa02d",
+    measurementId: "G-W1KD22ZQLS"
+  };
+  
+  
+  
+    firebase.initializeApp(firebaseConfig);
+   
+    window.onload=function () {
+        render();
+      };
+      function render() {
+          window.recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container');
+          recaptchaVerifier.render();
+      }
+        function phoneAuth() {
+          //get the number
+          var countryCode = document.getElementById('verifyphone').value.replace (/^/,'+91');
+          var number=countryCode;
+          console.log(number)
+          //phone number authentication function of firebase
+          //it takes two parameter first one is number,,,second one is recaptcha
+          firebase.auth().signInWithPhoneNumber(number,window.recaptchaVerifier).then(function (confirmationResult) {
+              //s is in lowercase
+              window.confirmationResult=confirmationResult;
+              coderesult=confirmationResult;
+              console.log(coderesult);
+              alert("OTP sent successfully");
+          }).catch(function (error) {
+              if(error.message == 'reCAPTCHA client element has been removed: 0'){
+                  error.message= "Please Enter Captcha"
+              }
+              alert(error.message);
+              console.log(error)
+          });
+      }
+      function codeverify() {
+          var code=document.getElementById('verifyotp').value;
+          coderesult.confirm(code).then(function (result) {
+              alert("OTP has been verified");
+              document.getElementById('formid').submit();
+              var user=result.user;
+              console.log(user);
+          }).catch(function (error) {
+              alert(error.message);
+          });
+      }
+    
+  
+    
 
 
-var spinner = $('#loader');
-spinner.show();
-
-$.ajax({
-type:'POST',
-url:'/donateblood',
-data:$('#formid').serialize(),
-success:function(response){
-spinner.hide();
-//success.show();
- alert(response);
-$('.hidden').html(response);
-}
-});
-var form=document.getElementById('formid').reset();
-return false;
-
-
-});
-});
 </script>
 </body>
