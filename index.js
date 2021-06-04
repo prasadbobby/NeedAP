@@ -16,7 +16,7 @@ const express = require("express");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
 require("./passport-setup");
-const moment = require("moment");
+const moment = require("moment-timezone");
 const hbs = require("hbs");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -147,6 +147,7 @@ app.get(
 axios
   .get("https://api.covid19india.org/state_district_wise.json")
   .then(function (response) {
+    // console.log(response.data['Andhra Pradesh'].districtData['East Godavari'].confirmed)
     const ap = response.data["Andhra Pradesh"].districtData;
     casesFunc(ap);
     let totalConfirmed = 0,
@@ -1327,7 +1328,7 @@ async function insertBloodData(request) {
       state: request.body.donorstate,
       address: request.body.donoraddress,
       unixTimeStamp: +new Date(),
-      sortedDate: moment().format("lll"),
+      sortedDate: moment().tz("Asia/Kolkata").format("lll"),
     })
     .then(function () {
       console.log("Document successfully written!");
@@ -1336,7 +1337,7 @@ async function insertBloodData(request) {
       console.error("Error writing document: ", error);
     });
 }
-
+// console.log( moment().tz("Asia/Kolkata").format("lll"))
 async function insertPlasmaData(request) {
   const writeResult = await admin
     .firestore()
@@ -1357,7 +1358,7 @@ async function insertPlasmaData(request) {
       state: request.body.donorstate,
       address: request.body.donoraddress,
       unixTimeStamp: +new Date(),
-      sortedDate: moment().format("lll"),
+      sortedDate: moment().tz("Asia/Kolkata").format("lll"),
     })
     .then(function () {
       console.log("Document successfully written!");
@@ -1387,7 +1388,7 @@ async function insertRequestsData(request) {
       patientaddress: request.body.patientaddress,
       posteddate: currentDate,
       unixTimeStamp: +new Date(),
-      sortedDate: moment().format("lll"),
+      sortedDate: moment().tz("Asia/Kolkata").format("lll"),
     })
     .then(function () {
       console.log("Document successfully written!");
@@ -1408,7 +1409,7 @@ async function insertFeedbackData(request) {
       Rating: request.body.feedbackrating,
       Feedback: request.body.feedback,
       unixTimeStamp: +new Date(),
-      sortedDate: moment().format("lll"),
+      sortedDate: moment().tz("Asia/Kolkata").format("lll"),
     })
     .then(function () {
       console.log("Document successfully written!");
@@ -1444,7 +1445,7 @@ async function insertNewsData(request) {
       Title: request.body.newstitle,
       Content: request.body.newscontent,
       unixTimeStamp: +new Date(),
-      Date: moment().format("lll"),
+      Date: moment().tz("Asia/Kolkata").format("lll"),
       type: request.body.newstype,
     })
     .then(function () {
@@ -1466,7 +1467,7 @@ async function insertRemoveData(request) {
       Email: request.body.removeemail,
       Reason: request.body.reasoneremove,
       unixTimeStamp: +new Date(),
-      Date: moment().format("lll"),
+      Date: moment().tz("Asia/Kolkata").format("lll"),
     })
     .then(function () {
       console.log("Document successfully written!");
