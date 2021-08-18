@@ -431,7 +431,7 @@ axios
   .get("https://covidaps.com/data/covidaps.com/plasma_data.json")
   .then(function (response) {
     plasma(response.data);
-    //   console.log(response.data[1].name)
+      // console.log(response.data)
     //   separateBeds(response.data)
   })
   .catch(function (error) {
