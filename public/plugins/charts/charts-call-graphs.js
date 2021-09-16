@@ -6,9 +6,7 @@ var actives =[]
 $(document).ready(function(){
     var url = "https://data.covid19india.org/state_district_wise.json"
     $.getJSON(url,function(data){
-        
         // console.table(data['Andhra Pradesh'].districtData)
-     
         $.each(data['Andhra Pradesh'].districtData,function(id,obj){
             if (id != 'Other State'){
                 
