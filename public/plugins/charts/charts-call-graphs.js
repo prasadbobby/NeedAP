@@ -4,7 +4,7 @@ var recovereds =[]
 var deathss =[]
 var actives =[]
 $(document).ready(function(){
-    var url = "https://api.covid19india.org/state_district_wise.json"
+    var url = "https://data.covid19india.org/state_district_wise.json"
     $.getJSON(url,function(data){
         
         // console.table(data['Andhra Pradesh'].districtData)
@@ -33,6 +33,7 @@ $(document).ready(function(){
         // console.log(state)
     
     })
+    
 })
 
 

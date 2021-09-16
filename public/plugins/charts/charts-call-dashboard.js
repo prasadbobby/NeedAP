@@ -4,7 +4,7 @@ var recovered =[]
 var deaths =[]
 var active =[]
 $(document).ready(function(){
-    var url = "https://api.covid19india.org/state_district_wise.json"
+    var url = "https://data.covid19india.org/state_district_wise.json"
     $.getJSON(url,function(data){
         
         // console.table(data['Andhra Pradesh'].districtData)
@@ -30,9 +30,26 @@ $(document).ready(function(){
         active.shift();
     
     })
+    
 })
 
+// var settings = {
+//     'cache': false,
+//     'dataType': "jsonp",
+//     "async": true,
+//     "crossDomain": true,
+//     "url": "http://data.covid19india.org/state_district_wise.json",
+//     "method": "GET",
+//     "headers": {
+//         "accept": "application/json",
+//         "Access-Control-Allow-Origin":"*"
+//     }
+// }
 
+// $.ajax(settings).done(function (response) {
+//     console.log(response);
+
+// });
 
 var dashboardChart = document.getElementById('dashboard-chart').getContext('2d')
 
